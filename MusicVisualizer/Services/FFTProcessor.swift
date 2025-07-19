@@ -12,6 +12,7 @@ import Accelerate
 protocol FFTProcessorProtocol {
     var bufferSize: Int { get }
     func processAudioBuffer(_ buffer: AVAudioPCMBuffer) -> [Float]
+    func processAudioBuffer(_ buffer: [Float]) -> [Float]
 }
 
 @Observable
@@ -66,6 +67,25 @@ class FFTProcessor: FFTProcessorProtocol {
         }
         
         // Apply windowing function (Hann window) to reduce spectral leakage
+        applyHannWindow()
+        
+        // Perform DFT
+        vDSP_DFT_Execute(fftSetup, realInput, imaginaryInput, &realOutput, &imaginaryOutput)
+        
+        // Calculate magnitudes (only return first half due to symmetry)
+        return calculateMagnitudes()
+    }
+    
+    func processAudioBuffer(_ buffer: [Float]) -> [Float] {
+        let frameCount = min(buffer.count, bufferSize)
+        
+        // Copy audio data to real input, pad with zeros if necessary
+        for i in 0..<bufferSize {
+            realInput[i] = i < frameCount ? buffer[i] : 0.0
+            imaginaryInput[i] = 0.0 // Clear imaginary input
+        }
+        
+        // Apply windowing function
         applyHannWindow()
         
         // Perform DFT

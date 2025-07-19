@@ -13,6 +13,7 @@ protocol AudioEngineServiceProtocol {
     func startEngine() async -> Bool
     func stopEngine()
     func installTap(tapBlock: @escaping AVAudioNodeTapBlock)
+    func installTap(onBus bus: Int, bufferSize: Int, format: AVAudioFormat?, block: @escaping (AVAudioPCMBuffer, AVAudioTime) -> Void)
 }
 
 @Observable
@@ -77,5 +78,10 @@ class AudioEngineService: AudioEngineServiceProtocol {
         let format = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: 1)
         
         inputNode.installTap(onBus: 0, bufferSize: bufferSize, format: format, block: tapBlock)
+    }
+    
+    func installTap(onBus bus: Int, bufferSize: Int, format: AVAudioFormat?, block: @escaping (AVAudioPCMBuffer, AVAudioTime) -> Void) {
+        let inputNode = audioEngine.inputNode
+        inputNode.installTap(onBus: bus, bufferSize: UInt32(bufferSize), format: format, block: block)
     }
 }

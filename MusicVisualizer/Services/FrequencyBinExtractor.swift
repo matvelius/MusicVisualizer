@@ -11,6 +11,7 @@ protocol FrequencyBinExtractorProtocol {
     var numberOfBands: Int { get }
     var frequencyRanges: [Range<Double>] { get }
     func extractBins(from frequencyData: [Float]) -> [Float]
+    func extractBins(from magnitudes: [Float], bandCount: Int) -> [Float]
 }
 
 @Observable
@@ -59,6 +60,12 @@ class FrequencyBinExtractor: FrequencyBinExtractorProtocol {
         }
         
         return bins
+    }
+    
+    func extractBins(from magnitudes: [Float], bandCount: Int) -> [Float] {
+        // Create temporary extractor with the requested band count
+        let tempExtractor = FrequencyBinExtractor(numberOfBands: bandCount)
+        return tempExtractor.extractBins(from: magnitudes)
     }
     
     // Create logarithmically spaced frequency ranges for better perceptual distribution

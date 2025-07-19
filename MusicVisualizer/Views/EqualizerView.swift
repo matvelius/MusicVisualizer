@@ -9,6 +9,7 @@ import SwiftUI
 
 struct EqualizerView: View {
     @State private var viewModel = EqualizerViewModel()
+    @State private var audioVisualizerService: AudioVisualizerService
     
     let barCount: Int
     let barSpacing: CGFloat = 4
@@ -16,6 +17,7 @@ struct EqualizerView: View {
     
     init(barCount: Int = 8) {
         self.barCount = barCount
+        self._audioVisualizerService = State(initialValue: AudioVisualizerService(bandCount: barCount))
     }
     
     var body: some View {
@@ -38,16 +40,29 @@ struct EqualizerView: View {
             viewModel = EqualizerViewModel(bandCount: barCount)
             viewModel.startAnimation()
             
-            // Add some test data for UI testing so bars are visible
-            #if DEBUG
-            let testData: [Float] = Array(0..<barCount).map { index in
-                Float(0.3 + 0.1 * sin(Double(index) * 0.5)) // Varying heights for visibility
+            // Connect audio visualizer service to view model
+            audioVisualizerService.onFrequencyDataUpdate = { frequencyData in
+                viewModel.updateFrequencyData(frequencyData)
             }
-            viewModel.updateFrequencyData(testData)
+            
+            // Start real-time audio visualization
+            Task {
+                await audioVisualizerService.startVisualization()
+            }
+            
+            // Add some test data for UI testing when no audio is available
+            #if DEBUG
+            if !audioVisualizerService.isRunning {
+                let testData: [Float] = Array(0..<barCount).map { index in
+                    Float(0.3 + 0.1 * sin(Double(index) * 0.5)) // Varying heights for visibility
+                }
+                viewModel.updateFrequencyData(testData)
+            }
             #endif
         }
         .onDisappear {
             viewModel.stopAnimation()
+            audioVisualizerService.stopVisualization()
         }
     }
     
