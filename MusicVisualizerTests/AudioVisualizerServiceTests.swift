@@ -15,7 +15,7 @@ struct AudioVisualizerServiceTests {
         let service = AudioVisualizerService()
         
         #expect(service.isRunning == false)
-        #expect(service.bandCount == 8) // Default band count
+        #expect(service.bandCount == 21) // Default band count
     }
     
     @Test func testInitialization_withCustomBandCount() throws {
@@ -214,7 +214,7 @@ class MockFFTProcessorForVisualizer: FFTProcessorProtocol {
 class MockFrequencyBinExtractorForVisualizer: FrequencyBinExtractorProtocol {
     var mockBins: [Float] = []
     var extractBinsCalled = false
-    var numberOfBands: Int = 8
+    var numberOfBands: Int = 21
     var frequencyRanges: [Range<Double>] = []
     
     func extractBins(from frequencyData: [Float]) -> [Float] {
@@ -224,6 +224,13 @@ class MockFrequencyBinExtractorForVisualizer: FrequencyBinExtractorProtocol {
     
     func extractBins(from magnitudes: [Float], bandCount: Int) -> [Float] {
         extractBinsCalled = true
-        return mockBins
+        // Return mockBins if it matches the requested bandCount, otherwise pad/truncate
+        if mockBins.count == bandCount {
+            return mockBins
+        } else if mockBins.count > bandCount {
+            return Array(mockBins.prefix(bandCount))
+        } else {
+            return mockBins + Array(repeating: 0.0, count: bandCount - mockBins.count)
+        }
     }
 }

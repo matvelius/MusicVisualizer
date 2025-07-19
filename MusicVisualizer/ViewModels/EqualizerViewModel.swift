@@ -17,7 +17,7 @@ class EqualizerViewModel {
     private let smoothingFactor: Double = 0.8
     private var previousValues: [Double] = []
     
-    init(bandCount: Int = 8) {
+    init(bandCount: Int = 21) {
         self.bandCount = bandCount
         self.barHeights = Array(repeating: 0.0, count: bandCount)
         self.previousValues = Array(repeating: 0.0, count: bandCount)

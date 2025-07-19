@@ -22,7 +22,7 @@ class FrequencyBinExtractor: FrequencyBinExtractorProtocol {
     private let bufferSize: Int
     private let frequencyResolution: Double
     
-    init(numberOfBands: Int = 8, sampleRate: Double = 44100, bufferSize: Int = 1024) {
+    init(numberOfBands: Int = 21, sampleRate: Double = 44100, bufferSize: Int = 1024) {
         self.numberOfBands = numberOfBands
         self.sampleRate = sampleRate
         self.bufferSize = bufferSize

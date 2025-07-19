@@ -15,7 +15,7 @@ struct EqualizerView: View {
     let barSpacing: CGFloat = 4
     let minBarHeight: CGFloat = 2
     
-    init(barCount: Int = 8) {
+    init(barCount: Int = 21) {
         self.barCount = barCount
         self._audioVisualizerService = State(initialValue: AudioVisualizerService(bandCount: barCount))
     }
@@ -99,8 +99,8 @@ struct EqualizerBar: View {
     }
 }
 
-#Preview("Equalizer View - 8 Bands") {
-    EqualizerView(barCount: 8)
+#Preview("Equalizer View - 21 Bands") {
+    EqualizerView(barCount: 21)
         .frame(height: 300)
         .background(Color.black)
 }

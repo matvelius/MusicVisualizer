@@ -23,7 +23,7 @@ class AudioVisualizerService {
     var onFrequencyDataUpdate: (([Float]) -> Void)?
     
     init(
-        bandCount: Int = 8,
+        bandCount: Int = 21,
         permissionService: AudioPermissionServiceProtocol = AudioPermissionService(),
         audioEngineService: AudioEngineServiceProtocol = AudioEngineService(),
         fftProcessor: FFTProcessorProtocol = FFTProcessor(),

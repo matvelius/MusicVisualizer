@@ -13,7 +13,7 @@ struct EqualizerViewModelTests {
     @Test func testInitialization_withDefaultBandCount() throws {
         let viewModel = EqualizerViewModel()
         
-        #expect(viewModel.barHeights.count == 8) // Default band count
+        #expect(viewModel.barHeights.count == 21) // Default band count
         #expect(viewModel.barHeights.allSatisfy { $0 == 0.0 }) // Should start at zero
         #expect(viewModel.isAnimating == false) // Should not be animating initially
     }

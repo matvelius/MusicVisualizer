@@ -11,12 +11,12 @@ import Testing
 struct FrequencyBinExtractorTests {
     
     @Test func testExtractBins_withCorrectNumberOfBands() throws {
-        let extractor = FrequencyBinExtractor(numberOfBands: 8, sampleRate: 44100, bufferSize: 1024)
+        let extractor = FrequencyBinExtractor(numberOfBands: 21, sampleRate: 44100, bufferSize: 1024)
         let frequencyData = Array(repeating: Float(1.0), count: 512) // Mock FFT output
         
         let bins = extractor.extractBins(from: frequencyData)
         
-        #expect(bins.count == 8)
+        #expect(bins.count == 21)
     }
     
     @Test func testExtractBins_withDifferentBandCounts() throws {
@@ -33,11 +33,11 @@ struct FrequencyBinExtractorTests {
     }
     
     @Test func testFrequencyRanges_coverExpectedSpectrum() throws {
-        let extractor = FrequencyBinExtractor(numberOfBands: 8, sampleRate: 44100, bufferSize: 1024)
+        let extractor = FrequencyBinExtractor(numberOfBands: 21, sampleRate: 44100, bufferSize: 1024)
         
         let ranges = extractor.frequencyRanges
         
-        #expect(ranges.count == 8)
+        #expect(ranges.count == 21)
         #expect(ranges.first?.lowerBound ?? 0 >= 20) // Should start around human hearing range
         #expect(ranges.last?.upperBound ?? 0 <= 22050) // Should not exceed Nyquist frequency
         
@@ -48,7 +48,7 @@ struct FrequencyBinExtractorTests {
     }
     
     @Test func testExtractBins_withLogarithmicFrequencyDistribution() throws {
-        let extractor = FrequencyBinExtractor(numberOfBands: 8, sampleRate: 44100, bufferSize: 1024)
+        let extractor = FrequencyBinExtractor(numberOfBands: 21, sampleRate: 44100, bufferSize: 1024)
         
         // Create frequency data with energy concentrated in specific ranges
         var frequencyData = Array(repeating: Float(0.1), count: 512)
@@ -71,12 +71,12 @@ struct FrequencyBinExtractorTests {
     }
     
     @Test func testExtractBins_withEmptyInput_returnsZeros() throws {
-        let extractor = FrequencyBinExtractor(numberOfBands: 8, sampleRate: 44100, bufferSize: 1024)
+        let extractor = FrequencyBinExtractor(numberOfBands: 21, sampleRate: 44100, bufferSize: 1024)
         let emptyData = Array(repeating: Float(0.0), count: 512)
         
         let bins = extractor.extractBins(from: emptyData)
         
         #expect(bins.allSatisfy { $0 == 0.0 })
-        #expect(bins.count == 8)
+        #expect(bins.count == 21)
     }
 }
