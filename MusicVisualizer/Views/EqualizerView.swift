@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import Combine
 
 struct EqualizerView: View {
     @State private var viewModel = EqualizerViewModel()
     @State private var audioVisualizerService: AudioVisualizerService
+    @State private var cancellables = Set<AnyCancellable>()
     
     let barCount: Int
     let minBarHeight: CGFloat = 2
@@ -79,32 +81,11 @@ struct EqualizerView: View {
         .accessibilityIdentifier("EqualizerView")
         .accessibilityLabel("Audio frequency equalizer")
         .onAppear {
-            viewModel = EqualizerViewModel(bandCount: barCount)
-            viewModel.startAnimation()
-            
-            // Connect audio visualizer service to view model
-            audioVisualizerService.onFrequencyDataUpdate = { frequencyData in
-                viewModel.updateFrequencyData(frequencyData)
-            }
-            
-            // Start real-time audio visualization
-            Task {
-                await audioVisualizerService.startVisualization()
-            }
-            
-            // Add some test data for UI testing when no audio is available
-            #if DEBUG
-            if !audioVisualizerService.isRunning {
-                let testData: [Float] = Array(0..<barCount).map { index in
-                    Float(0.3 + 0.1 * sin(Double(index) * 0.5)) // Varying heights for visibility
-                }
-                viewModel.updateFrequencyData(testData)
-            }
-            #endif
+            setupVisualization()
+            setupBackgroundStateHandling()
         }
         .onDisappear {
-            viewModel.stopAnimation()
-            audioVisualizerService.stopVisualization()
+            cleanupVisualization()
         }
     }
     
@@ -124,6 +105,78 @@ struct EqualizerView: View {
     private func barColor(for index: Int) -> Color {
         let hue = Double(index) / Double(barCount) * 0.7 // Use first 70% of hue spectrum (red to blue)
         return Color(hue: hue, saturation: 0.8, brightness: 0.9)
+    }
+    
+    // MARK: - Background State Handling
+    
+    private func setupVisualization() {
+        viewModel = EqualizerViewModel(bandCount: barCount)
+        viewModel.startAnimation()
+        
+        // Connect audio visualizer service to view model
+        audioVisualizerService.onFrequencyDataUpdate = { frequencyData in
+            viewModel.updateFrequencyData(frequencyData)
+        }
+        
+        // Start real-time audio visualization
+        Task {
+            await audioVisualizerService.startVisualization()
+        }
+        
+        // Add some test data for UI testing when no audio is available
+        #if DEBUG
+        if !audioVisualizerService.isRunning {
+            let testData: [Float] = Array(0..<barCount).map { index in
+                Float(0.3 + 0.1 * sin(Double(index) * 0.5)) // Varying heights for visibility
+            }
+            viewModel.updateFrequencyData(testData)
+        }
+        #endif
+    }
+    
+    private func setupBackgroundStateHandling() {
+        // Listen for app state changes
+        NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)
+            .sink { _ in
+                pauseVisualization()
+            }
+            .store(in: &cancellables)
+        
+        NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)
+            .sink { _ in
+                resumeVisualization()
+            }
+            .store(in: &cancellables)
+        
+        NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
+            .sink { _ in
+                pauseVisualization()
+            }
+            .store(in: &cancellables)
+        
+        NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
+            .sink { _ in
+                resumeVisualization()
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func pauseVisualization() {
+        audioVisualizerService.stopVisualization()
+        viewModel.stopAnimation()
+    }
+    
+    private func resumeVisualization() {
+        viewModel.startAnimation()
+        Task {
+            await audioVisualizerService.startVisualization()
+        }
+    }
+    
+    private func cleanupVisualization() {
+        cancellables.removeAll()
+        viewModel.stopAnimation()
+        audioVisualizerService.stopVisualization()
     }
 }
 
