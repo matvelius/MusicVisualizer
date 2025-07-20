@@ -29,11 +29,13 @@ struct EqualizerView: View {
                         color: barColor(for: index),
                         index: index
                     )
+                    .drawingGroup() // Optimize rendering by rasterizing
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding(.horizontal, 16)
         }
+        .drawingGroup() // Rasterize entire equalizer for better performance
         .accessibilityIdentifier("EqualizerView")
         .accessibilityLabel("Audio frequency equalizer")
         .onAppear {
@@ -83,19 +85,23 @@ struct EqualizerBar: View {
     let color: Color
     let index: Int
     
+    // Pre-compute gradient for better performance
+    private var optimizedGradient: LinearGradient {
+        LinearGradient(
+            gradient: Gradient(colors: [color.opacity(0.8), color]),
+            startPoint: .top,
+            endPoint: .bottom
+        )
+    }
+    
     var body: some View {
         RoundedRectangle(cornerRadius: 3)
-            .fill(
-                LinearGradient(
-                    gradient: Gradient(colors: [color.opacity(0.8), color]),
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-            )
+            .fill(optimizedGradient)
             .frame(height: height)
             .frame(maxWidth: .infinity)
             .shadow(color: color.opacity(0.3), radius: 2, x: 0, y: 1)
             .accessibilityHidden(true)
+            .animation(.linear(duration: 1.0/60.0), value: height) // Explicit 60fps animation
     }
 }
 

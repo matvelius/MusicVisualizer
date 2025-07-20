@@ -79,10 +79,22 @@ class FFTProcessor: FFTProcessorProtocol {
     func processAudioBuffer(_ buffer: [Float]) -> [Float] {
         let frameCount = min(buffer.count, bufferSize)
         
-        // Copy audio data to real input, pad with zeros if necessary
-        for i in 0..<bufferSize {
-            realInput[i] = i < frameCount ? buffer[i] : 0.0
-            imaginaryInput[i] = 0.0 // Clear imaginary input
+        // Optimized copy using withUnsafeMutableBufferPointer for better performance
+        realInput.withUnsafeMutableBufferPointer { realPtr in
+            imaginaryInput.withUnsafeMutableBufferPointer { imagPtr in
+                // Copy input data
+                if frameCount > 0 {
+                    buffer.withUnsafeBufferPointer { bufferPtr in
+                        realPtr.baseAddress?.assign(from: bufferPtr.baseAddress!, count: frameCount)
+                    }
+                }
+                // Zero-pad remaining
+                if frameCount < bufferSize {
+                    (realPtr.baseAddress! + frameCount).initialize(repeating: 0.0, count: bufferSize - frameCount)
+                }
+                // Clear imaginary input
+                imagPtr.baseAddress?.initialize(repeating: 0.0, count: bufferSize)
+            }
         }
         
         // Apply windowing function
