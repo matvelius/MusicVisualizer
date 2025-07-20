@@ -12,6 +12,7 @@ struct EqualizerView: View {
     @State private var viewModel = EqualizerViewModel()
     @State private var audioVisualizerService: AudioVisualizerService
     @State private var cancellables = Set<AnyCancellable>()
+    @State private var settingsManager = SettingsManager.shared
     
     let barCount: Int
     let minBarHeight: CGFloat = 2
@@ -103,8 +104,7 @@ struct EqualizerView: View {
     }
     
     private func barColor(for index: Int) -> Color {
-        let hue = Double(index) / Double(barCount) * 0.7 // Use first 70% of hue spectrum (red to blue)
-        return Color(hue: hue, saturation: 0.8, brightness: 0.9)
+        return settingsManager.colorTheme.color(for: index, totalBands: barCount)
     }
     
     // MARK: - Background State Handling

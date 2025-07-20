@@ -9,21 +9,62 @@ import SwiftUI
 
 struct HomeView: View {
     @State private var viewModel = HomeViewModel()
+    @State private var settingsManager = SettingsManager.shared
+    @State private var showingSettings = false
     
     var body: some View {
         NavigationStack {
-            GeometryReader { geometry in
-                let isLandscape = geometry.size.width > geometry.size.height
+            ZStack {
+                Color.black.ignoresSafeArea()
                 
-                EqualizerView(barCount: 21)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color.black.ignoresSafeArea())
+                GeometryReader { geometry in
+                    let isLandscape = geometry.size.width > geometry.size.height
+                    
+                    // Visualization based on current mode
+                    Group {
+                        switch settingsManager.visualizationMode {
+                        case .bars:
+                            EqualizerView(barCount: settingsManager.bandCount)
+                        case .circular:
+                            // CircularEqualizerView(barCount: settingsManager.bandCount)
+                            EqualizerView(barCount: settingsManager.bandCount)
+                        case .waveform:
+                            // Placeholder for future waveform view
+                            EqualizerView(barCount: settingsManager.bandCount)
+                        }
+                    }
+                    .animation(.easeInOut(duration: 0.5), value: settingsManager.visualizationMode)
                     .animation(.easeInOut(duration: 0.3), value: isLandscape)
+                    .animation(.easeInOut(duration: 0.3), value: settingsManager.bandCount)
+                }
+                
+                // Settings button
+                VStack {
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            showingSettings = true
+                        }) {
+                            Image(systemName: "gear")
+                                .font(.title2)
+                                .foregroundColor(.white.opacity(0.8))
+                                .padding()
+                                .background(Color.black.opacity(0.3))
+                                .clipShape(Circle())
+                        }
+                        .padding(.trailing, 20)
+                        .padding(.top, 20)
+                    }
+                    Spacer()
+                }
             }
             .navigationBarHidden(true)
             .statusBarHidden()
         }
         .preferredColorScheme(.dark)
+        .sheet(isPresented: $showingSettings) {
+            SettingsView()
+        }
     }
 }
 
