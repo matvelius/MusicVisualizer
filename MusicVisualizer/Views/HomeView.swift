@@ -26,8 +26,7 @@ struct HomeView: View {
                         case .bars:
                             EqualizerView(barCount: settingsManager.bandCount)
                         case .circular:
-                            // CircularEqualizerView(barCount: settingsManager.bandCount)
-                            EqualizerView(barCount: settingsManager.bandCount)
+                            CircularEqualizerView(barCount: settingsManager.bandCount)
                         case .waveform:
                             // Placeholder for future waveform view
                             EqualizerView(barCount: settingsManager.bandCount)
