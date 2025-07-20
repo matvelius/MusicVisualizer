@@ -12,13 +12,27 @@ struct HomeView: View {
     
     var body: some View {
         NavigationStack {
-            EqualizerView(barCount: 21)
-            .padding()
+            GeometryReader { geometry in
+                let isLandscape = geometry.size.width > geometry.size.height
+                
+                EqualizerView(barCount: 21)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color.black.ignoresSafeArea())
+                    .animation(.easeInOut(duration: 0.3), value: isLandscape)
+            }
             .navigationBarHidden(true)
+            .statusBarHidden()
         }
+        .preferredColorScheme(.dark)
     }
 }
 
-#Preview {
+#Preview("Portrait") {
     HomeView()
+        .previewInterfaceOrientation(.portrait)
+}
+
+#Preview("Landscape") {
+    HomeView()
+        .previewInterfaceOrientation(.landscapeLeft)
 }
