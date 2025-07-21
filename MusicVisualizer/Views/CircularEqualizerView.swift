@@ -10,17 +10,17 @@ import Combine
 
 struct CircularEqualizerView: View {
     @State private var viewModel = EqualizerViewModel()
-    @State private var audioVisualizerService: AudioVisualizerService
     @State private var cancellables = Set<AnyCancellable>()
     @State private var settingsManager = SettingsManager.shared
     
     let barCount: Int
+    let audioVisualizerService: AudioVisualizerService
     let minBarHeight: CGFloat = 10
     let maxBarHeight: CGFloat = 80
     
-    init(barCount: Int = 21) {
+    init(barCount: Int = 21, audioVisualizerService: AudioVisualizerService) {
         self.barCount = barCount
-        self._audioVisualizerService = State(initialValue: AudioVisualizerService(bandCount: barCount))
+        self.audioVisualizerService = audioVisualizerService
     }
     
     var body: some View {
@@ -79,9 +79,7 @@ struct CircularEqualizerView: View {
             viewModel.updateFrequencyData(frequencyData)
         }
         
-        Task {
-            await audioVisualizerService.startVisualization()
-        }
+        // Don't start the service here - let HomeView manage the service lifecycle
         
         #if DEBUG
         if !audioVisualizerService.isRunning {
@@ -112,21 +110,19 @@ struct CircularEqualizerView: View {
     }
     
     private func pauseVisualization() {
-        audioVisualizerService.stopVisualization()
+        // Don't stop the service, just pause the animation
         viewModel.stopAnimation()
     }
     
     private func resumeVisualization() {
+        // Just resume the animation
         viewModel.startAnimation()
-        Task {
-            await audioVisualizerService.startVisualization()
-        }
     }
     
     private func cleanupVisualization() {
         cancellables.removeAll()
         viewModel.stopAnimation()
-        audioVisualizerService.stopVisualization()
+        // Don't stop the service - let HomeView manage it
     }
 }
 
@@ -168,11 +164,11 @@ struct CircularBar: View {
 }
 
 #Preview("Circular Equalizer - 21 Bands") {
-    CircularEqualizerView(barCount: 21)
+    CircularEqualizerView(barCount: 21, audioVisualizerService: AudioVisualizerService(bandCount: 21))
         .background(Color.black)
 }
 
 #Preview("Circular Equalizer - 12 Bands") {
-    CircularEqualizerView(barCount: 12)
+    CircularEqualizerView(barCount: 12, audioVisualizerService: AudioVisualizerService(bandCount: 12))
         .background(Color.black)
 }

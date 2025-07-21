@@ -11,6 +11,11 @@ struct HomeView: View {
     @State private var viewModel = HomeViewModel()
     @State private var settingsManager = SettingsManager.shared
     @State private var showingSettings = false
+    @State private var sharedAudioService: AudioVisualizerService
+    
+    init() {
+        self._sharedAudioService = State(initialValue: AudioVisualizerService(bandCount: 21))
+    }
     
     var body: some View {
         NavigationStack {
@@ -24,12 +29,12 @@ struct HomeView: View {
                     Group {
                         switch settingsManager.visualizationMode {
                         case .bars:
-                            EqualizerView(barCount: settingsManager.bandCount)
+                            EqualizerView(barCount: settingsManager.bandCount, audioVisualizerService: sharedAudioService)
                         case .circular:
-                            CircularEqualizerView(barCount: settingsManager.bandCount)
+                            CircularEqualizerView(barCount: settingsManager.bandCount, audioVisualizerService: sharedAudioService)
                         case .waveform:
                             // Placeholder for future waveform view
-                            EqualizerView(barCount: settingsManager.bandCount)
+                            EqualizerView(barCount: settingsManager.bandCount, audioVisualizerService: sharedAudioService)
                         }
                     }
                     .animation(.easeInOut(duration: 0.5), value: settingsManager.visualizationMode)
@@ -63,6 +68,11 @@ struct HomeView: View {
         .preferredColorScheme(.dark)
         .sheet(isPresented: $showingSettings) {
             SettingsView()
+        }
+        .onAppear {
+            Task {
+                await sharedAudioService.startVisualization()
+            }
         }
     }
 }

@@ -56,11 +56,12 @@ class AudioEngineService: AudioEngineServiceProtocol {
     }
     
     func stopEngine() {
+        // Remove taps before stopping the engine
+        removeTaps()
+        
         if audioEngine.isRunning {
             audioEngine.stop()
         }
-        
-        inputNode?.removeTap(onBus: 0)
         
         do {
             let audioSession = AVAudioSession.sharedInstance()
@@ -73,6 +74,9 @@ class AudioEngineService: AudioEngineServiceProtocol {
     func installTap(tapBlock: @escaping AVAudioNodeTapBlock) {
         guard let inputNode = inputNode else { return }
         
+        // Remove any existing taps first to prevent "nullptr == Tap()" crash
+        inputNode.removeTap(onBus: 0)
+        
         let bufferSize: UInt32 = 1024
         let sampleRate = inputNode.outputFormat(forBus: 0).sampleRate
         let format = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: 1)
@@ -82,6 +86,15 @@ class AudioEngineService: AudioEngineServiceProtocol {
     
     func installTap(onBus bus: Int, bufferSize: Int, format: AVAudioFormat?, block: @escaping (AVAudioPCMBuffer, AVAudioTime) -> Void) {
         let inputNode = audioEngine.inputNode
+        
+        // Remove any existing taps first to prevent "nullptr == Tap()" crash
+        inputNode.removeTap(onBus: bus)
+        
         inputNode.installTap(onBus: bus, bufferSize: UInt32(bufferSize), format: format, block: block)
+    }
+    
+    private func removeTaps() {
+        let inputNode = audioEngine.inputNode
+        inputNode.removeTap(onBus: 0)
     }
 }

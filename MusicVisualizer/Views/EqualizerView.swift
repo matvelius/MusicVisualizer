@@ -10,11 +10,11 @@ import Combine
 
 struct EqualizerView: View {
     @State private var viewModel = EqualizerViewModel()
-    @State private var audioVisualizerService: AudioVisualizerService
     @State private var cancellables = Set<AnyCancellable>()
     @State private var settingsManager = SettingsManager.shared
     
     let barCount: Int
+    let audioVisualizerService: AudioVisualizerService
     let minBarHeight: CGFloat = 2
     
     // Adaptive spacing and sizing based on orientation and device
@@ -52,9 +52,9 @@ struct EqualizerView: View {
         }
     }
     
-    init(barCount: Int = 21) {
+    init(barCount: Int = 21, audioVisualizerService: AudioVisualizerService) {
         self.barCount = barCount
-        self._audioVisualizerService = State(initialValue: AudioVisualizerService(bandCount: barCount))
+        self.audioVisualizerService = audioVisualizerService
     }
     
     var body: some View {
@@ -118,10 +118,7 @@ struct EqualizerView: View {
             viewModel.updateFrequencyData(frequencyData)
         }
         
-        // Start real-time audio visualization
-        Task {
-            await audioVisualizerService.startVisualization()
-        }
+        // Don't start the service here - let HomeView manage the service lifecycle
         
         // Add some test data for UI testing when no audio is available
         #if DEBUG
@@ -162,21 +159,19 @@ struct EqualizerView: View {
     }
     
     private func pauseVisualization() {
-        audioVisualizerService.stopVisualization()
+        // Don't stop the service, just pause the animation
         viewModel.stopAnimation()
     }
     
     private func resumeVisualization() {
+        // Just resume the animation
         viewModel.startAnimation()
-        Task {
-            await audioVisualizerService.startVisualization()
-        }
     }
     
     private func cleanupVisualization() {
         cancellables.removeAll()
         viewModel.stopAnimation()
-        audioVisualizerService.stopVisualization()
+        // Don't stop the service - let HomeView manage it
     }
 }
 
@@ -216,25 +211,25 @@ struct EqualizerBar: View {
 }
 
 #Preview("Equalizer View - 21 Bands") {
-    EqualizerView(barCount: 21)
+    EqualizerView(barCount: 21, audioVisualizerService: AudioVisualizerService(bandCount: 21))
         .frame(height: 300)
         .background(Color.black)
 }
 
 #Preview("Equalizer View - iPad Portrait") {
-    EqualizerView(barCount: 21)
+    EqualizerView(barCount: 21, audioVisualizerService: AudioVisualizerService(bandCount: 21))
         .frame(width: 768, height: 1024)
         .background(Color.black)
 }
 
 #Preview("Equalizer View - iPad Landscape") {
-    EqualizerView(barCount: 21)
+    EqualizerView(barCount: 21, audioVisualizerService: AudioVisualizerService(bandCount: 21))
         .frame(width: 1024, height: 768)
         .background(Color.black)
 }
 
 #Preview("Equalizer View - iPhone") {
-    EqualizerView(barCount: 21)
+    EqualizerView(barCount: 21, audioVisualizerService: AudioVisualizerService(bandCount: 21))
         .frame(width: 390, height: 844)
         .background(Color.black)
 }

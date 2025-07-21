@@ -74,7 +74,8 @@ struct CircularEqualizerTests {
     }
     
     @Test func testCircularEqualizer_initialization() {
-        let equalizer = CircularEqualizerView(barCount: 12)
+        let audioService = AudioVisualizerService(bandCount: 12)
+        let equalizer = CircularEqualizerView(barCount: 12, audioVisualizerService: audioService)
         
         #expect(equalizer.barCount == 12)
         #expect(equalizer.minBarHeight > 0)
@@ -82,7 +83,8 @@ struct CircularEqualizerTests {
     }
     
     @Test func testCircularEqualizer_barHeightCalculation() {
-        let equalizer = CircularEqualizerView(barCount: 5)
+        let audioService = AudioVisualizerService(bandCount: 5)
+        let equalizer = CircularEqualizerView(barCount: 5, audioVisualizerService: audioService)
         
         // Test with no data (should return minimum height)
         let minHeight = equalizer.barHeight(for: 0)
@@ -94,7 +96,8 @@ struct CircularEqualizerTests {
     }
     
     @Test func testCircularEqualizer_colorIntegration() {
-        let equalizer = CircularEqualizerView(barCount: 8)
+        let audioService = AudioVisualizerService(bandCount: 8)
+        let equalizer = CircularEqualizerView(barCount: 8, audioVisualizerService: audioService)
         
         // Test that colors are generated for all bars
         for index in 0..<equalizer.barCount {
