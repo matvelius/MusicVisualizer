@@ -165,6 +165,82 @@ struct SettingsView: View {
                     }
                 }
                 
+                // Fractal Settings
+                Section("Fractal Visualization") {
+                    VStack(alignment: .leading, spacing: 16) {
+                        // Fractal Type Selection
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Fractal Type")
+                                .font(.headline)
+                            
+                            Picker("Fractal Type", selection: $settingsManager.fractalType) {
+                                Text("Mandelbrot").tag(0)
+                                Text("Julia").tag(1)
+                                Text("Burning Ship").tag(2)
+                            }
+                            .pickerStyle(SegmentedPickerStyle())
+                            
+                            Text("Different mathematical fractals with unique visual characteristics")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        Divider()
+                        
+                        // Zoom Speed
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text("Zoom Speed")
+                                    .font(.headline)
+                                Spacer()
+                                Text(String(format: "%.1fx", settingsManager.fractalZoomSpeed))
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                            Slider(
+                                value: Binding(
+                                    get: { Double(settingsManager.fractalZoomSpeed) },
+                                    set: { settingsManager.fractalZoomSpeed = Float($0) }
+                                ),
+                                in: 0.1...3.0,
+                                step: 0.1
+                            )
+                            
+                            Text("Controls how fast the fractal zooms in response to audio")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        Divider()
+                        
+                        // Color Intensity
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text("Color Intensity")
+                                    .font(.headline)
+                                Spacer()
+                                Text(String(format: "%.1f", settingsManager.fractalColorIntensity))
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                            Slider(
+                                value: Binding(
+                                    get: { Double(settingsManager.fractalColorIntensity) },
+                                    set: { settingsManager.fractalColorIntensity = Float($0) }
+                                ),
+                                in: 0.1...2.0,
+                                step: 0.1
+                            )
+                            
+                            Text("Adjusts the vibrancy of colors in response to audio frequencies")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
+                
                 // Reset Section
                 Section {
                     Button(action: {

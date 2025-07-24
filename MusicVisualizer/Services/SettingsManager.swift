@@ -25,6 +25,9 @@ class SettingsManager {
         static let noiseGateThreshold = "noiseGateThreshold"
         static let highPassFilterEnabled = "highPassFilterEnabled"
         static let highPassCutoffFrequency = "highPassCutoffFrequency"
+        static let fractalType = "fractalType"
+        static let fractalZoomSpeed = "fractalZoomSpeed"
+        static let fractalColorIntensity = "fractalColorIntensity"
     }
     
     // Current Settings
@@ -77,6 +80,25 @@ class SettingsManager {
         }
     }
     
+    // Fractal Settings
+    var fractalType: Int {
+        didSet {
+            userDefaults.set(fractalType, forKey: Keys.fractalType)
+        }
+    }
+    
+    var fractalZoomSpeed: Float {
+        didSet {
+            userDefaults.set(fractalZoomSpeed, forKey: Keys.fractalZoomSpeed)
+        }
+    }
+    
+    var fractalColorIntensity: Float {
+        didSet {
+            userDefaults.set(fractalColorIntensity, forKey: Keys.fractalColorIntensity)
+        }
+    }
+    
     private init() {
         // Load saved settings or use defaults
         if let savedTheme = userDefaults.string(forKey: Keys.colorTheme),
@@ -101,6 +123,11 @@ class SettingsManager {
         self.noiseGateThreshold = userDefaults.object(forKey: Keys.noiseGateThreshold) as? Float ?? 0.01
         self.highPassFilterEnabled = userDefaults.object(forKey: Keys.highPassFilterEnabled) as? Bool ?? false
         self.highPassCutoffFrequency = userDefaults.object(forKey: Keys.highPassCutoffFrequency) as? Float ?? 80.0
+        
+        // Load fractal settings
+        self.fractalType = userDefaults.object(forKey: Keys.fractalType) as? Int ?? 0
+        self.fractalZoomSpeed = userDefaults.object(forKey: Keys.fractalZoomSpeed) as? Float ?? 1.0
+        self.fractalColorIntensity = userDefaults.object(forKey: Keys.fractalColorIntensity) as? Float ?? 1.0
     }
     
     // Reset to defaults
@@ -113,6 +140,9 @@ class SettingsManager {
         noiseGateThreshold = 0.01
         highPassFilterEnabled = false
         highPassCutoffFrequency = 80.0
+        fractalType = 0
+        fractalZoomSpeed = 1.0
+        fractalColorIntensity = 1.0
     }
 }
 
@@ -120,8 +150,7 @@ class SettingsManager {
 
 enum VisualizationMode: String, CaseIterable, Identifiable {
     case bars = "bars"
-    case circular = "circular"
-    case waveform = "waveform"
+    case fractals = "fractals"
     
     var id: String { rawValue }
     
@@ -129,10 +158,8 @@ enum VisualizationMode: String, CaseIterable, Identifiable {
         switch self {
         case .bars:
             return "Bars"
-        case .circular:
-            return "Circular"
-        case .waveform:
-            return "Waveform"
+        case .fractals:
+            return "Fractals"
         }
     }
 }

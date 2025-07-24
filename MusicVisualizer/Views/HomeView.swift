@@ -30,11 +30,8 @@ struct HomeView: View {
                         switch settingsManager.visualizationMode {
                         case .bars:
                             EqualizerView(barCount: settingsManager.bandCount, audioVisualizerService: sharedAudioService)
-                        case .circular:
-                            CircularEqualizerView(barCount: settingsManager.bandCount, audioVisualizerService: sharedAudioService)
-                        case .waveform:
-                            // Placeholder for future waveform view
-                            EqualizerView(barCount: settingsManager.bandCount, audioVisualizerService: sharedAudioService)
+                        case .fractals:
+                            FractalVisualizerView(audioVisualizerService: sharedAudioService)
                         }
                     }
                     .animation(.easeInOut(duration: 0.5), value: settingsManager.visualizationMode)

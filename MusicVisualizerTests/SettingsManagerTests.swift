@@ -39,11 +39,11 @@ struct SettingsManagerTests {
         let settings = createTestSettingsManager()
         
         // Change visualization mode
-        settings.visualizationMode = .circular
+        settings.visualizationMode = .fractals
         
         // Create new instance
         let newSettings = createTestSettingsManager()
-        #expect(newSettings.visualizationMode == .circular)
+        #expect(newSettings.visualizationMode == .fractals)
         
         // Cleanup
         clearTestUserDefaults()
@@ -82,7 +82,7 @@ struct SettingsManagerTests {
         
         // Change all settings
         settings.colorTheme = .fire
-        settings.visualizationMode = .circular
+        settings.visualizationMode = .fractals
         settings.bandCount = 32
         settings.animationSpeed = 2.0
         
