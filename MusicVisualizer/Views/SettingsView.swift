@@ -80,6 +80,91 @@ struct SettingsView: View {
                     }
                 }
                 
+                // Audio Filter Settings
+                Section("Audio Filters") {
+                    VStack(alignment: .leading, spacing: 16) {
+                        // Noise Gate
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text("Noise Gate")
+                                    .font(.headline)
+                                Spacer()
+                                Toggle("", isOn: $settingsManager.noiseGateEnabled)
+                            }
+                            
+                            if settingsManager.noiseGateEnabled {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    HStack {
+                                        Text("Threshold")
+                                            .font(.subheadline)
+                                            .foregroundColor(.secondary)
+                                        Spacer()
+                                        Text(String(format: "%.3f", settingsManager.noiseGateThreshold))
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                    }
+                                    
+                                    Slider(
+                                        value: Binding(
+                                            get: { Double(settingsManager.noiseGateThreshold) },
+                                            set: { settingsManager.noiseGateThreshold = Float($0) }
+                                        ),
+                                        in: 0.001...0.1,
+                                        step: 0.001
+                                    )
+                                }
+                                .padding(.leading, 16)
+                                .transition(.opacity.combined(with: .move(edge: .top)))
+                            }
+                            
+                            Text("Reduces background noise when signal is below threshold")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        Divider()
+                        
+                        // High-Pass Filter
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text("High-Pass Filter")
+                                    .font(.headline)
+                                Spacer()
+                                Toggle("", isOn: $settingsManager.highPassFilterEnabled)
+                            }
+                            
+                            if settingsManager.highPassFilterEnabled {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    HStack {
+                                        Text("Cutoff Frequency")
+                                            .font(.subheadline)
+                                            .foregroundColor(.secondary)
+                                        Spacer()
+                                        Text("\(Int(settingsManager.highPassCutoffFrequency)) Hz")
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                    }
+                                    
+                                    Slider(
+                                        value: Binding(
+                                            get: { Double(settingsManager.highPassCutoffFrequency) },
+                                            set: { settingsManager.highPassCutoffFrequency = Float($0) }
+                                        ),
+                                        in: 20...200,
+                                        step: 5
+                                    )
+                                }
+                                .padding(.leading, 16)
+                                .transition(.opacity.combined(with: .move(edge: .top)))
+                            }
+                            
+                            Text("Removes low-frequency noise below cutoff frequency")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
+                
                 // Reset Section
                 Section {
                     Button(action: {

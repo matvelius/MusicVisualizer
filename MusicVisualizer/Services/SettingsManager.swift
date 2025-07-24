@@ -21,6 +21,10 @@ class SettingsManager {
         static let visualizationMode = "visualizationMode"
         static let bandCount = "bandCount"
         static let animationSpeed = "animationSpeed"
+        static let noiseGateEnabled = "noiseGateEnabled"
+        static let noiseGateThreshold = "noiseGateThreshold"
+        static let highPassFilterEnabled = "highPassFilterEnabled"
+        static let highPassCutoffFrequency = "highPassCutoffFrequency"
     }
     
     // Current Settings
@@ -48,6 +52,31 @@ class SettingsManager {
         }
     }
     
+    // Audio Filter Settings
+    var noiseGateEnabled: Bool {
+        didSet {
+            userDefaults.set(noiseGateEnabled, forKey: Keys.noiseGateEnabled)
+        }
+    }
+    
+    var noiseGateThreshold: Float {
+        didSet {
+            userDefaults.set(noiseGateThreshold, forKey: Keys.noiseGateThreshold)
+        }
+    }
+    
+    var highPassFilterEnabled: Bool {
+        didSet {
+            userDefaults.set(highPassFilterEnabled, forKey: Keys.highPassFilterEnabled)
+        }
+    }
+    
+    var highPassCutoffFrequency: Float {
+        didSet {
+            userDefaults.set(highPassCutoffFrequency, forKey: Keys.highPassCutoffFrequency)
+        }
+    }
+    
     private init() {
         // Load saved settings or use defaults
         if let savedTheme = userDefaults.string(forKey: Keys.colorTheme),
@@ -66,6 +95,12 @@ class SettingsManager {
         
         self.bandCount = userDefaults.object(forKey: Keys.bandCount) as? Int ?? 21
         self.animationSpeed = userDefaults.object(forKey: Keys.animationSpeed) as? Double ?? 1.0
+        
+        // Load audio filter settings
+        self.noiseGateEnabled = userDefaults.object(forKey: Keys.noiseGateEnabled) as? Bool ?? false
+        self.noiseGateThreshold = userDefaults.object(forKey: Keys.noiseGateThreshold) as? Float ?? 0.01
+        self.highPassFilterEnabled = userDefaults.object(forKey: Keys.highPassFilterEnabled) as? Bool ?? false
+        self.highPassCutoffFrequency = userDefaults.object(forKey: Keys.highPassCutoffFrequency) as? Float ?? 80.0
     }
     
     // Reset to defaults
@@ -74,6 +109,10 @@ class SettingsManager {
         visualizationMode = .bars
         bandCount = 21
         animationSpeed = 1.0
+        noiseGateEnabled = false
+        noiseGateThreshold = 0.01
+        highPassFilterEnabled = false
+        highPassCutoffFrequency = 80.0
     }
 }
 
