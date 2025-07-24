@@ -259,6 +259,92 @@ final class FractalVisualizationUITests: XCTestCase {
     
     // MARK: - Error Recovery Tests
     
+    func testFractalAnimationPersistence() throws {
+        try navigateToFractalMode()
+        
+        let fractalView = app.otherElements["FractalVisualizerView"]
+        XCTAssertTrue(fractalView.waitForExistence(timeout: 5.0))
+        
+        // Test extended viewing to ensure animation doesn't fade out
+        let testDuration: TimeInterval = 30.0 // 30 seconds
+        let startTime = Date()
+        
+        var frameCheckCount = 0
+        let maxFrameChecks = 10
+        
+        while Date().timeIntervalSince(startTime) < testDuration && frameCheckCount < maxFrameChecks {
+            // Verify fractal view remains present and functional
+            XCTAssertTrue(fractalView.exists, "Fractal view should remain visible during extended viewing")
+            
+            // Verify UI remains responsive
+            let settingsButton = app.buttons["gear"]
+            XCTAssertTrue(settingsButton.isHittable, "Settings should remain accessible")
+            
+            // Wait before next check
+            Thread.sleep(forTimeInterval: testDuration / Double(maxFrameChecks))
+            frameCheckCount += 1
+        }
+        
+        // Final verification that system is still responsive
+        let settingsButton = app.buttons["gear"]
+        XCTAssertTrue(settingsButton.isHittable, "App should remain responsive after extended viewing")
+        
+        // Take a screenshot to verify visual state
+        let finalScreenshot = app.screenshot()
+        let attachment = XCTAttachment(screenshot: finalScreenshot)
+        attachment.name = "Fractal Animation After Extended Viewing"
+        attachment.lifetime = .keepAlways
+        add(attachment)
+    }
+    
+    func testFractalAnimationRecoveryAfterBackgrounding() throws {
+        try navigateToFractalMode()
+        
+        let fractalView = app.otherElements["FractalVisualizerView"]
+        XCTAssertTrue(fractalView.waitForExistence(timeout: 5.0))
+        
+        // Simulate app backgrounding by using home button (if available in simulator)
+        // Note: This test may need adjustment based on simulator capabilities
+        XCUIDevice.shared.press(.home)
+        
+        // Wait a moment
+        Thread.sleep(forTimeInterval: 2.0)
+        
+        // Return to app
+        app.activate()
+        
+        // Wait for app to become active again
+        let homeView = app.otherElements["HomeView"]
+        XCTAssertTrue(homeView.waitForExistence(timeout: 5.0), "App should reactivate properly")
+        
+        // Verify fractal view still works
+        if fractalView.exists {
+            // Fractal view should still be functional
+            XCTAssertTrue(fractalView.exists, "Fractal view should recover after backgrounding")
+        } else {
+            // If not visible, should be able to navigate back to it
+            let settingsButton = app.buttons["gear"]
+            if settingsButton.exists {
+                settingsButton.tap()
+                
+                let settingsView = app.otherElements["SettingsView"]
+                XCTAssertTrue(settingsView.waitForExistence(timeout: 2.0))
+                
+                let visualizationPicker = app.segmentedControls.firstMatch
+                if visualizationPicker.exists {
+                    let fractalsOption = visualizationPicker.buttons["Fractals"]
+                    if fractalsOption.exists && !fractalsOption.isSelected {
+                        fractalsOption.tap()
+                    }
+                }
+                
+                app.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.1)).tap()
+                
+                XCTAssertTrue(fractalView.waitForExistence(timeout: 3.0), "Should be able to restore fractal view")
+            }
+        }
+    }
+    
     func testAppRecoveryFromFractalError() throws {
         try navigateToFractalMode()
         

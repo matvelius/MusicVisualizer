@@ -35,13 +35,13 @@ struct FractalParticle {
         self.rotation = 0.0
         self.color = SIMD4<Float>(1.0, 1.0, 1.0, 1.0)
         self.age = 0.0
-        self.maxAge = 8.0 + Float.random(in: -2.0...4.0) // 6-12 seconds lifespan
+        self.maxAge = 12.0 + Float.random(in: -4.0...8.0) // 8-20 seconds lifespan
         self.generation = generation
         self.fractalType = fractalType
         self.complexity = 1.0
         self.isAlive = true
         self.lastSpawnTime = 0.0
-        self.spawnCooldown = 0.5 + Float.random(in: 0.0...1.0) // Random spawn delay
+        self.spawnCooldown = 0.2 + Float.random(in: 0.0...0.3) // Shorter spawn delay for more activity
         self.velocityX = Float.random(in: -0.01...0.01)
         self.velocityY = Float.random(in: -0.01...0.01)
     }
@@ -49,9 +49,35 @@ struct FractalParticle {
     mutating func update(deltaTime: Float, audioLow: Float, audioMid: Float, audioHigh: Float, audioOverall: Float) {
         age += deltaTime
         
-        // Update position with slight drift
-        position.x += velocityX * deltaTime * (1.0 + audioOverall * 0.5)
-        position.y += velocityY * deltaTime * (1.0 + audioOverall * 0.5)
+        // Update position with slight drift and boundary constraints
+        let driftSpeed: Float = 0.3 // Reduced drift speed
+        let audioMultiplier = 1.0 + audioOverall * 0.5
+        let velocityMultiplier = deltaTime * driftSpeed * audioMultiplier
+        let newX = position.x + velocityX * velocityMultiplier
+        let newY = position.y + velocityY * velocityMultiplier
+        
+        // Keep particles within screen bounds (normalized coordinates -1 to 1)
+        let boundary: Float = 0.9 // Leave small margin
+        position.x = max(-boundary, min(boundary, newX))
+        position.y = max(-boundary, min(boundary, newY))
+        
+        // If particle hits boundary, reverse velocity and apply gentle pull toward center
+        if abs(position.x) >= boundary || abs(position.y) >= boundary {
+            if abs(position.x) >= boundary {
+                velocityX *= -0.8 // Reverse and dampen
+            }
+            if abs(position.y) >= boundary {
+                velocityY *= -0.8 // Reverse and dampen
+            }
+            
+            // Add gentle pull toward center
+            let centerPull: Float = 0.02
+            let distanceFromCenter = sqrt(position.x * position.x + position.y * position.y)
+            if distanceFromCenter > 0 {
+                velocityX -= (position.x / distanceFromCenter) * centerPull
+                velocityY -= (position.y / distanceFromCenter) * centerPull
+            }
+        }
         
         // Update rotation
         rotation += deltaTime * 0.2 * (1.0 + audioMid * 2.0)
@@ -60,9 +86,10 @@ struct FractalParticle {
         let hue = (audioMid + Float(generation) * 0.1).truncatingRemainder(dividingBy: 1.0)
         color = hsvToRgb(h: hue, s: 0.8 + audioHigh * 0.2, v: 0.8 + audioOverall * 0.2, a: getAlpha())
         
-        // Update size with breathing effect
+        // Update size with breathing effect (ensure minimum visible size)
         let breathingFactor = 1.0 + sin(age * 3.0 + Float(generation)) * 0.1 * audioOverall
-        size *= breathingFactor
+        let newSize = size * breathingFactor
+        size = max(newSize, 0.05) // Ensure particles don't become invisible
         
         // Update complexity
         complexity = 0.5 + audioHigh * 1.5
@@ -89,10 +116,25 @@ struct FractalParticle {
     
     func shouldSpawn(currentTime: Float, audioVolume: Float) -> Bool {
         let timeSinceLastSpawn = currentTime - lastSpawnTime
-        let volumeSpeedMultiplier = 0.3 + audioVolume * 2.0 // Higher volume = faster spawning
+        let volumeSpeedMultiplier = 0.5 + audioVolume * 1.5 // More responsive to volume
         let adjustedCooldown = spawnCooldown / volumeSpeedMultiplier
         
-        return timeSinceLastSpawn > adjustedCooldown && generation < 6 // Max 6 generations
+        // More lenient generation limits with guaranteed spawning for early generations
+        let maxGeneration = 8 // Simplified max generation
+        
+        // Guarantee spawning for early generations, reduce probability for later ones
+        let generationProbability: Float
+        if generation < 3 {
+            generationProbability = 1.0 // Always spawn for generations 0-2
+        } else if generation < 6 {
+            generationProbability = 0.8 // High probability for generations 3-5
+        } else {
+            generationProbability = 0.4 // Lower but still decent probability for generations 6-7
+        }
+        
+        return timeSinceLastSpawn > adjustedCooldown && 
+               generation < maxGeneration && 
+               Float.random(in: 0...1) < generationProbability
     }
 }
 
@@ -142,6 +184,22 @@ class GenerativeFractalRenderer: ObservableObject {
     // Performance tracking
     private var lastUpdateTime: CFTimeInterval = 0
     private let targetFrameRate: Double = 60.0
+    private var lastRegenerationTime: Float = 0.0
+    
+    // Public access to particle count for debugging
+    var particleCount: Int {
+        return particles.count
+    }
+    
+    // Debug information
+    var debugInfo: String {
+        let generationCounts = Dictionary(grouping: particles, by: { $0.generation })
+            .mapValues { $0.count }
+            .sorted { $0.key < $1.key }
+        
+        let generationSummary = generationCounts.map { "G\($0.key): \($0.value)" }.joined(separator: ", ")
+        return "Total: \(particles.count) [\(generationSummary)]"
+    }
     
     init() throws {
         // Calculate aligned uniform buffer size
@@ -261,6 +319,34 @@ class GenerativeFractalRenderer: ObservableObject {
         particles.append(seedParticle)
     }
     
+    private func createSeedParticle() {
+        let seedParticle = FractalParticle(
+            position: SIMD2<Float>(0.0, 0.0),
+            size: 0.3 + Float.random(in: -0.1...0.1),
+            generation: 0,
+            fractalType: Int.random(in: 0...3)
+        )
+        particles.append(seedParticle)
+    }
+    
+    private func createRandomSeedParticle() {
+        // Create seed particles in a smaller central area to prevent immediate drift
+        let randomPosition = SIMD2<Float>(
+            Float.random(in: -0.2...0.2),
+            Float.random(in: -0.2...0.2)
+        )
+        var seedParticle = FractalParticle(
+            position: randomPosition,
+            size: 0.2 + Float.random(in: 0.0...0.2),
+            generation: 0,
+            fractalType: Int.random(in: 0...3)
+        )
+        // Reduce initial velocity for seed particles
+        seedParticle.velocityX *= 0.5
+        seedParticle.velocityY *= 0.5
+        particles.append(seedParticle)
+    }
+    
     func updateAudioData(low: Float, mid: Float, high: Float, overall: Float) {
         audioLow = low
         audioMid = mid
@@ -277,8 +363,15 @@ class GenerativeFractalRenderer: ObservableObject {
         for i in particles.indices.reversed() {
             particles[i].update(deltaTime: deltaTime, audioLow: audioLow, audioMid: audioMid, audioHigh: audioHigh, audioOverall: audioOverall)
             
-            // Remove dead particles
+            // Remove dead particles or particles that somehow got too far off-screen
             if !particles[i].isAlive {
+                particles.remove(at: i)
+                continue
+            }
+            
+            // Safety check: remove particles that are way off screen (shouldn't happen with new constraints)
+            let position = particles[i].position
+            if abs(position.x) > 2.0 || abs(position.y) > 2.0 {
                 particles.remove(at: i)
                 continue
             }
@@ -288,6 +381,47 @@ class GenerativeFractalRenderer: ObservableObject {
                 spawnChildren(from: i)
                 particles[i].lastSpawnTime = currentTime
             }
+        }
+        
+        // Much more aggressive particle regeneration
+        let minParticleCount = Int(5 + audioOverall * 10) // 5-15 minimum particles based on audio
+        let currentCount = particles.count
+        
+        // Always ensure minimum population regardless of audio level
+        if currentCount == 0 {
+            // Emergency regeneration - create multiple seed particles immediately
+            for _ in 0..<3 {
+                createSeedParticle()
+            }
+        } else if currentCount < minParticleCount {
+            // Add particles aggressively when below threshold
+            let particlesToAdd = min(minParticleCount - currentCount, 5) // Add up to 5 per frame
+            for _ in 0..<particlesToAdd {
+                if audioOverall > 0.05 {
+                    createRandomSeedParticle()
+                } else {
+                    // Even during low audio, maintain some activity
+                    createSeedParticle()
+                }
+            }
+        }
+        
+        // Additional insurance: if we have very few low-generation particles, create more seeds
+        let lowGenerationCount = particles.filter { $0.generation < 2 }.count
+        if lowGenerationCount < 2 && audioOverall > 0.02 {
+            for _ in 0..<(3 - lowGenerationCount) {
+                createRandomSeedParticle()
+            }
+        }
+        
+        // Time-based safety regeneration: ensure we create new particles at least every 3 seconds
+        if currentTime - lastRegenerationTime > 3.0 {
+            if particles.count < 8 { // Always maintain at least 8 particles
+                for _ in 0..<max(1, 8 - particles.count) {
+                    createRandomSeedParticle()
+                }
+            }
+            lastRegenerationTime = currentTime
         }
     }
     
@@ -306,15 +440,27 @@ class GenerativeFractalRenderer: ObservableObject {
         for i in 0..<childCount {
             // Calculate spawn position using golden ratio spiral
             let angle = goldenAngle * Float(i) + parent.rotation
-            let distance = parent.size * 2.0 * (1.0 + audioMid * 0.5)
+            let baseDistance = parent.size * 1.5 * (0.8 + audioMid * 0.4) // Reduced distance
             
-            let childPosition = SIMD2<Float>(
-                parent.position.x + cos(angle) * distance,
-                parent.position.y + sin(angle) * distance
+            var childPosition = SIMD2<Float>(
+                parent.position.x + cos(angle) * baseDistance,
+                parent.position.y + sin(angle) * baseDistance
             )
             
+            // Constrain child position to stay within bounds
+            let boundary: Float = 0.85
+            childPosition.x = max(-boundary, min(boundary, childPosition.x))
+            childPosition.y = max(-boundary, min(boundary, childPosition.y))
+            
+            // If child would spawn out of bounds, pull it back toward parent
+            if abs(childPosition.x) >= boundary || abs(childPosition.y) >= boundary {
+                let pullFactor: Float = 0.7
+                childPosition.x = parent.position.x + (childPosition.x - parent.position.x) * pullFactor
+                childPosition.y = parent.position.y + (childPosition.y - parent.position.y) * pullFactor
+            }
+            
             // Size decreases with generation
-            let sizeFactor = pow(0.7, Float(parent.generation + 1))
+            let sizeFactor = pow(0.75, Float(parent.generation + 1)) // Slightly less aggressive size reduction
             let childSize = parent.size * sizeFactor * (0.8 + audioHigh * 0.4)
             
             var child = FractalParticle(
@@ -324,9 +470,10 @@ class GenerativeFractalRenderer: ObservableObject {
                 fractalType: parent.fractalType
             )
             
-            // Set initial velocity away from parent
-            child.velocityX = cos(angle) * 0.02
-            child.velocityY = sin(angle) * 0.02
+            // Set smaller initial velocity to reduce drift
+            let velocityScale: Float = 0.008 // Reduced from 0.02
+            child.velocityX = cos(angle) * velocityScale
+            child.velocityY = sin(angle) * velocityScale
             
             particles.append(child)
             
