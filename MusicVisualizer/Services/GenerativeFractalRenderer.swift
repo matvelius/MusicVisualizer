@@ -29,6 +29,15 @@ struct FractalParticle {
     var velocityX: Float
     var velocityY: Float
     
+    // Shape variety properties
+    var shapeType: Int // 0=circle, 1=triangle, 2=square, 3=hexagon, 4=star
+    var morphProgress: Float // Progress through shape transformation
+    var nextShapeType: Int // Target shape for morphing
+    var morphSpeed: Float // Speed of shape transformation
+    var scaleX: Float // Non-uniform scaling for shape variety
+    var scaleY: Float
+    var opacity: Float // Individual opacity for blending
+    
     init(position: SIMD2<Float>, size: Float, generation: Int = 0, fractalType: Int = 0) {
         self.position = position
         self.size = size
@@ -44,6 +53,15 @@ struct FractalParticle {
         self.spawnCooldown = 0.2 + Float.random(in: 0.0...0.3) // Shorter spawn delay for more activity
         self.velocityX = Float.random(in: -0.01...0.01)
         self.velocityY = Float.random(in: -0.01...0.01)
+        
+        // Initialize shape variety properties
+        self.shapeType = Int.random(in: 0...4) // Random initial shape
+        self.morphProgress = 0.0
+        self.nextShapeType = Int.random(in: 0...4) // Random morph target
+        self.morphSpeed = 0.3 + Float.random(in: 0.0...0.7) // Varying morph speeds
+        self.scaleX = 0.8 + Float.random(in: 0.0...0.4) // Slight scale variation
+        self.scaleY = 0.8 + Float.random(in: 0.0...0.4)
+        self.opacity = 0.4 + Float.random(in: 0.0...0.4) // Semi-transparent for blending
     }
     
     mutating func update(deltaTime: Float, audioLow: Float, audioMid: Float, audioHigh: Float, audioOverall: Float) {
@@ -79,17 +97,38 @@ struct FractalParticle {
             }
         }
         
-        // Update rotation
+        // Update rotation with audio-reactive speed
         rotation += deltaTime * 0.2 * (1.0 + audioMid * 2.0)
         
-        // Update color based on audio
-        let hue = (audioMid + Float(generation) * 0.1).truncatingRemainder(dividingBy: 1.0)
-        color = hsvToRgb(h: hue, s: 0.8 + audioHigh * 0.2, v: 0.8 + audioOverall * 0.2, a: getAlpha())
+        // Update shape morphing based on audio
+        morphProgress += deltaTime * morphSpeed * (0.5 + audioHigh * 1.5)
+        if morphProgress >= 1.0 {
+            // Complete morph - switch to next shape
+            shapeType = nextShapeType
+            nextShapeType = Int.random(in: 0...4)
+            morphProgress = 0.0
+            morphSpeed = 0.3 + Float.random(in: 0.0...0.7) // Randomize next morph speed
+        }
+        
+        // Update non-uniform scaling based on audio frequencies
+        let scaleVariation = sin(age * 2.0 + Float(generation)) * 0.2 * audioOverall
+        scaleX = max(0.5, min(1.5, 1.0 + scaleVariation + audioLow * 0.3))
+        scaleY = max(0.5, min(1.5, 1.0 - scaleVariation * 0.7 + audioHigh * 0.3))
+        
+        // Update color based on audio with enhanced saturation for blending
+        let hue = (audioMid + Float(generation) * 0.1 + age * 0.05).truncatingRemainder(dividingBy: 1.0)
+        let saturation = 0.6 + audioHigh * 0.4 // Slightly reduced saturation for better blending
+        let brightness = 0.7 + audioOverall * 0.3
+        color = hsvToRgb(h: hue, s: saturation, v: brightness, a: getAlpha())
         
         // Update size with breathing effect (ensure minimum visible size)
         let breathingFactor = 1.0 + sin(age * 3.0 + Float(generation)) * 0.1 * audioOverall
         let newSize = size * breathingFactor
         size = max(newSize, 0.05) // Ensure particles don't become invisible
+        
+        // Update opacity for smooth blending effects
+        let baseOpacity = 0.3 + audioOverall * 0.4 // More transparent for better blending
+        opacity = baseOpacity * getAlpha() // Combine with lifecycle alpha
         
         // Update complexity
         complexity = 0.5 + audioHigh * 1.5
@@ -147,6 +186,12 @@ struct ParticleUniforms {
     var complexity: Float
     var fractalType: Int32
     var generation: Int32
+    var shapeType: Int32
+    var nextShapeType: Int32
+    var morphProgress: Float
+    var scaleX: Float
+    var scaleY: Float
+    var opacity: Float
 }
 
 // MARK: - Generative Fractal Renderer
@@ -275,11 +320,17 @@ class GenerativeFractalRenderer: ObservableObject {
         
         pipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
         pipelineDescriptor.colorAttachments[0].isBlendingEnabled = true
+        
+        // Enhanced blending for better transparency and shape overlap
         pipelineDescriptor.colorAttachments[0].rgbBlendOperation = .add
         pipelineDescriptor.colorAttachments[0].alphaBlendOperation = .add
+        
+        // Use additive blending for RGB to create glow/blend effects
         pipelineDescriptor.colorAttachments[0].sourceRGBBlendFactor = .sourceAlpha
+        pipelineDescriptor.colorAttachments[0].destinationRGBBlendFactor = .one // Additive for glowing blend
+        
+        // Standard alpha blending for transparency
         pipelineDescriptor.colorAttachments[0].sourceAlphaBlendFactor = .sourceAlpha
-        pipelineDescriptor.colorAttachments[0].destinationRGBBlendFactor = .oneMinusSourceAlpha
         pipelineDescriptor.colorAttachments[0].destinationAlphaBlendFactor = .oneMinusSourceAlpha
         
         do {
@@ -508,20 +559,26 @@ class GenerativeFractalRenderer: ObservableObject {
         for (index, particle) in particles.enumerated() {
             guard index < maxParticles else { break }
             
-            // Create model matrix
+            // Create model matrix with non-uniform scaling
             let translation = matrix4x4_translation(particle.position.x, particle.position.y, 0)
             let rotation = matrix4x4_rotation(radians: particle.rotation, axis: SIMD3<Float>(0, 0, 1))
-            let scale = matrix4x4_scale(particle.size, particle.size, 1)
+            let scale = matrix4x4_scale(particle.size * particle.scaleX, particle.size * particle.scaleY, 1)
             let modelMatrix = translation * rotation * scale
             
-            // Set up uniforms
+            // Set up uniforms with shape morphing data
             var uniforms = ParticleUniforms(
                 modelMatrix: modelMatrix,
-                color: particle.color,
+                color: SIMD4<Float>(particle.color.x, particle.color.y, particle.color.z, particle.opacity),
                 size: particle.size,
                 complexity: particle.complexity,
                 fractalType: Int32(particle.fractalType),
-                generation: Int32(particle.generation)
+                generation: Int32(particle.generation),
+                shapeType: Int32(particle.shapeType),
+                nextShapeType: Int32(particle.nextShapeType),
+                morphProgress: particle.morphProgress,
+                scaleX: particle.scaleX,
+                scaleY: particle.scaleY,
+                opacity: particle.opacity
             )
             
             let alignedOffset = alignedUniformSize * index

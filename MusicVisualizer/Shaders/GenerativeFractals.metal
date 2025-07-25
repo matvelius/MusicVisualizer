@@ -22,6 +22,12 @@ struct VertexOut {
     float complexity;
     int fractalType;
     int generation;
+    int shapeType;
+    int nextShapeType;
+    float morphProgress;
+    float scaleX;
+    float scaleY;
+    float opacity;
 };
 
 struct ParticleUniforms {
@@ -31,6 +37,12 @@ struct ParticleUniforms {
     float complexity;
     int fractalType;
     int generation;
+    int shapeType;
+    int nextShapeType;
+    float morphProgress;
+    float scaleX;
+    float scaleY;
+    float opacity;
 };
 
 // MARK: - Vertex Shader
@@ -50,6 +62,12 @@ vertex VertexOut particleVertexShader(VertexIn in [[stage_in]],
     out.complexity = uniforms.complexity;
     out.fractalType = uniforms.fractalType;
     out.generation = uniforms.generation;
+    out.shapeType = uniforms.shapeType;
+    out.nextShapeType = uniforms.nextShapeType;
+    out.morphProgress = uniforms.morphProgress;
+    out.scaleX = uniforms.scaleX;
+    out.scaleY = uniforms.scaleY;
+    out.opacity = uniforms.opacity;
     
     return out;
 }
@@ -154,14 +172,61 @@ float generateOrganicPattern(float2 coord, float complexity, int generation) {
 
 // MARK: - Fragment Shader
 
+// Shape generation functions
+float generateShapeMask(float2 coord, int shapeType) {
+    float2 p = coord * 2.0 - 1.0; // Convert to [-1,1] range
+    
+    switch (shapeType) {
+        case 0: { // Circle
+            float dist = length(p);
+            return 1.0 - smoothstep(0.7, 1.0, dist);
+        }
+        
+        case 1: { // Triangle
+            float2 q = abs(p);
+            float triangle = max(q.x * 0.866025 + p.y * 0.5, -p.y * 0.5) - 0.43301;
+            return 1.0 - smoothstep(-0.1, 0.1, triangle);
+        }
+        
+        case 2: { // Square
+            float2 d = abs(p) - 0.7;
+            float square = length(max(d, 0.0)) + min(max(d.x, d.y), 0.0);
+            return 1.0 - smoothstep(-0.1, 0.1, square);
+        }
+        
+        case 3: { // Hexagon
+            const float3 k = float3(-0.866025404, 0.5, 0.577350269);
+            p = abs(p);
+            p -= 2.0 * min(dot(k.xy, p), 0.0) * k.xy;
+            p -= float2(clamp(p.x, -k.z * 0.7, k.z * 0.7), 0.7);
+            float hexagon = length(p) * sign(p.y);
+            return 1.0 - smoothstep(-0.1, 0.1, hexagon);
+        }
+        
+        case 4: { // Star
+            float angle = atan2(p.y, p.x);
+            float radius = length(p);
+            float starAngle = fmod(angle + 3.14159, 3.14159 * 0.4) - 3.14159 * 0.2;
+            float starRadius = 0.7 * (0.5 + 0.5 * cos(5.0 * starAngle));
+            return 1.0 - smoothstep(starRadius - 0.1, starRadius + 0.1, radius);
+        }
+        
+        default:
+            return 1.0 - smoothstep(0.7, 1.0, length(p));
+    }
+}
+
 fragment float4 particleFragmentShader(VertexOut in [[stage_in]]) {
     float2 coord = in.texCoord;
     
-    // Create circular mask with soft edges
-    float dist = length(coord - 0.5) * 2.0;
-    float circleMask = 1.0 - smoothstep(0.8, 1.0, dist);
+    // Generate current and next shape masks
+    float currentMask = generateShapeMask(coord, in.shapeType);
+    float nextMask = generateShapeMask(coord, in.nextShapeType);
     
-    if (circleMask < 0.01) {
+    // Interpolate between shapes based on morph progress
+    float shapeMask = mix(currentMask, nextMask, in.morphProgress);
+    
+    if (shapeMask < 0.01) {
         discard_fragment();
     }
     
@@ -181,22 +246,27 @@ fragment float4 particleFragmentShader(VertexOut in [[stage_in]]) {
     float hueShift = combinedPattern * 0.3 + float(in.generation) * 0.1;
     baseColor.rgb = mix(baseColor.rgb, baseColor.bgr, hueShift);
     
-    // Add generation-based transparency
-    float generationAlpha = 1.0 - float(in.generation) * 0.1;
-    
     // Apply intensity based on pattern
     float intensity = combinedPattern * (0.5 + in.complexity * 0.5);
     
-    // Final color
+    // Final color with enhanced blending
     float4 finalColor = baseColor;
     finalColor.rgb *= intensity;
-    finalColor.a *= circleMask * generationAlpha;
     
-    // Add glow effect
-    if (dist < 0.3) {
-        float glowIntensity = (0.3 - dist) / 0.3;
-        finalColor.rgb += glowIntensity * 0.2;
+    // Use particle opacity for blending
+    finalColor.a = shapeMask * in.opacity;
+    
+    // Add subtle glow effect for better blending
+    float2 center = coord - 0.5;
+    float distFromCenter = length(center) * 2.0;
+    if (distFromCenter < 0.6) {
+        float glowIntensity = (0.6 - distFromCenter) / 0.6;
+        finalColor.rgb += glowIntensity * 0.15 * finalColor.rgb;
     }
+    
+    // Add edge softening for better blending
+    float edgeSoftness = 1.0 - smoothstep(0.3, 0.8, distFromCenter);
+    finalColor.a *= edgeSoftness;
     
     return finalColor;
 }
