@@ -115,11 +115,8 @@ struct FractalParticle {
         scaleX = max(0.5, min(1.5, 1.0 + scaleVariation + audioLow * 0.3))
         scaleY = max(0.5, min(1.5, 1.0 - scaleVariation * 0.7 + audioHigh * 0.3))
         
-        // Update color based on audio with enhanced saturation for blending
-        let hue = (audioMid + Float(generation) * 0.1 + age * 0.05).truncatingRemainder(dividingBy: 1.0)
-        let saturation = 0.6 + audioHigh * 0.4 // Slightly reduced saturation for better blending
-        let brightness = 0.7 + audioOverall * 0.3
-        color = hsvToRgb(h: hue, s: saturation, v: brightness, a: getAlpha())
+        // Update color based on selected theme and audio
+        color = getThemeBasedColor(audioLow: audioLow, audioMid: audioMid, audioHigh: audioHigh, audioOverall: audioOverall)
         
         // Update size with breathing effect (ensure minimum visible size)
         let breathingFactor = 1.0 + sin(age * 3.0 + Float(generation)) * 0.1 * audioOverall
@@ -151,6 +148,39 @@ struct FractalParticle {
             // Full opacity
             return 1.0
         }
+    }
+    
+    func getThemeBasedColor(audioLow: Float, audioMid: Float, audioHigh: Float, audioOverall: Float) -> SIMD4<Float> {
+        let settingsManager = SettingsManager.shared
+        let theme = settingsManager.colorTheme
+        
+        // Create a position based on generation, age, and audio for color variety
+        let basePosition = (Float(generation) * 0.15 + age * 0.03 + audioMid * 0.5).truncatingRemainder(dividingBy: 1.0)
+        let position = Double(max(0, min(1, basePosition)))
+        
+        // Get the theme color
+        let themeColor = theme.color(for: Int(position * 100), totalBands: 100)
+        let uiColor = UIColor(themeColor)
+        
+        var red: CGFloat = 0, green: CGFloat = 0, blue: CGFloat = 0, alpha: CGFloat = 0
+        uiColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        
+        // Apply audio-reactive intensity modulation
+        let intensity = CGFloat(0.7 + audioOverall * 0.3)
+        let saturationBoost = CGFloat(1.0 + audioHigh * 0.5)
+        
+        // Convert to HSV for better intensity control
+        var hue: CGFloat = 0, saturation: CGFloat = 0, brightness: CGFloat = 0
+        uiColor.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
+        
+        // Enhance saturation and brightness based on audio
+        let enhancedSaturation = min(1.0, saturation * saturationBoost)
+        let enhancedBrightness = min(1.0, brightness * intensity)
+        
+        let finalColor = UIColor(hue: hue, saturation: enhancedSaturation, brightness: enhancedBrightness, alpha: alpha)
+        finalColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        
+        return SIMD4<Float>(Float(red), Float(green), Float(blue), getAlpha())
     }
     
     func shouldSpawn(currentTime: Float, audioVolume: Float) -> Bool {
@@ -225,6 +255,7 @@ class GenerativeFractalRenderer: ObservableObject {
     var generationRate: Float = 1.0
     var maxGenerations: Int = 6
     var particleLifetime: Float = 8.0
+    private let settingsManager = SettingsManager.shared
     
     // Performance tracking
     private var lastUpdateTime: CFTimeInterval = 0
@@ -365,7 +396,7 @@ class GenerativeFractalRenderer: ObservableObject {
             position: SIMD2<Float>(0.0, 0.0),
             size: 0.3,
             generation: 0,
-            fractalType: 0
+            fractalType: settingsManager.fractalType
         )
         particles.append(seedParticle)
     }
@@ -375,7 +406,7 @@ class GenerativeFractalRenderer: ObservableObject {
             position: SIMD2<Float>(0.0, 0.0),
             size: 0.3 + Float.random(in: -0.1...0.1),
             generation: 0,
-            fractalType: Int.random(in: 0...3)
+            fractalType: settingsManager.fractalType
         )
         particles.append(seedParticle)
     }
@@ -390,7 +421,7 @@ class GenerativeFractalRenderer: ObservableObject {
             position: randomPosition,
             size: 0.2 + Float.random(in: 0.0...0.2),
             generation: 0,
-            fractalType: Int.random(in: 0...3)
+            fractalType: settingsManager.fractalType
         )
         // Reduce initial velocity for seed particles
         seedParticle.velocityX *= 0.5
@@ -518,7 +549,7 @@ class GenerativeFractalRenderer: ObservableObject {
                 position: childPosition,
                 size: childSize,
                 generation: parent.generation + 1,
-                fractalType: parent.fractalType
+                fractalType: settingsManager.fractalType
             )
             
             // Set smaller initial velocity to reduce drift
@@ -599,6 +630,13 @@ class GenerativeFractalRenderer: ObservableObject {
         particles.removeAll()
         initializeSeedParticle()
         currentTime = 0.0
+    }
+    
+    func updateFractalType() {
+        // Update all existing particles to use the new fractal type
+        for i in particles.indices {
+            particles[i].fractalType = settingsManager.fractalType
+        }
     }
 }
 

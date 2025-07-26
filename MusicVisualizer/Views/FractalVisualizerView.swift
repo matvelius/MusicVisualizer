@@ -95,6 +95,13 @@ struct FractalVisualizerView: View {
                 overall: audioData.overall
             )
         }
+        
+        // Monitor fractal type changes using UserDefaults
+        NotificationCenter.default.publisher(for: UserDefaults.didChangeNotification)
+            .sink { [weak fractalRenderer] _ in
+                fractalRenderer?.updateFractalType()
+            }
+            .store(in: &cancellables)
     }
     
     private func setupBackgroundStateHandling() {

@@ -90,57 +90,74 @@ float complexLength(float2 z) {
 float generateFractalPattern(float2 coord, int fractalType, float complexity, int generation) {
     float2 c = coord * 2.0 - 1.0; // Convert to [-1,1] range
     
-    // Scale based on complexity and generation
-    c *= (1.0 + complexity) * (1.0 + float(generation) * 0.1);
+    // Scale based on complexity and generation with different scaling for each type
+    float baseScale = (1.0 + complexity) * (1.0 + float(generation) * 0.1);
     
     switch (fractalType) {
-        case 0: { // Mandelbrot-inspired pattern
+        case 0: { // Mandelbrot-inspired pattern - Classic recursive structure
+            c *= baseScale * 1.2; // Larger scale for more detail
             float2 z = float2(0.0, 0.0);
-            int maxIter = int(20.0 + complexity * 30.0);
+            int maxIter = int(25.0 + complexity * 35.0);
+            float smoothValue = 0.0;
             
             for (int i = 0; i < maxIter; i++) {
-                if (complexLength(z) > 2.0) {
-                    return float(i) / float(maxIter);
+                float length_z = complexLength(z);
+                if (length_z > 4.0) { // Higher escape radius for smoother patterns
+                    smoothValue = float(i) - log2(log2(length_z));
+                    return smoothValue / float(maxIter);
                 }
                 z = complexSquare(z) + c;
             }
             return 1.0;
         }
         
-        case 1: { // Julia-inspired pattern
+        case 1: { // Julia-inspired pattern - Flowing organic shapes
+            c *= baseScale * 0.8; // Smaller scale for different visual density
             float2 z = c;
-            float2 juliaC = float2(-0.7 + cos(complexity * 3.14159) * 0.3, 
-                                   0.27015 + sin(complexity * 2.0) * 0.2);
-            int maxIter = int(15.0 + complexity * 25.0);
+            // Dynamic Julia constant that changes with complexity
+            float2 juliaC = float2(-0.8 + cos(complexity * 6.28318) * 0.4, 
+                                   0.156 + sin(complexity * 4.0) * 0.3);
+            int maxIter = int(20.0 + complexity * 30.0);
+            float smoothValue = 0.0;
             
             for (int i = 0; i < maxIter; i++) {
-                if (complexLength(z) > 2.0) {
-                    return float(i) / float(maxIter);
+                float length_z = complexLength(z);
+                if (length_z > 4.0) {
+                    smoothValue = float(i) - log2(log2(length_z));
+                    return smoothValue / float(maxIter);
                 }
                 z = complexSquare(z) + juliaC;
             }
             return 1.0;
         }
         
-        case 2: { // Burning Ship-inspired pattern
+        case 2: { // Burning Ship-inspired pattern - Sharp angular features
+            c *= baseScale * 1.5; // Even larger scale for dramatic effect
+            c.y = -abs(c.y); // Flip to get the ship shape
             float2 z = float2(0.0, 0.0);
-            int maxIter = int(18.0 + complexity * 28.0);
+            int maxIter = int(22.0 + complexity * 32.0);
+            float smoothValue = 0.0;
             
             for (int i = 0; i < maxIter; i++) {
-                if (complexLength(z) > 2.0) {
-                    return float(i) / float(maxIter);
+                float length_z = complexLength(z);
+                if (length_z > 4.0) {
+                    smoothValue = float(i) - log2(log2(length_z));
+                    return smoothValue / float(maxIter);
                 }
+                // The key difference: absolute values create the "burning" effect
                 z = float2(abs(z.x), abs(z.y));
                 z = complexSquare(z) + c;
             }
             return 1.0;
         }
         
-        default: { // Spiral pattern
+        default: { // Spiral pattern - Geometric and rhythmic
+            c *= baseScale * 0.6;
             float radius = length(c);
             float angle = atan2(c.y, c.x);
-            float spiral = sin(radius * 10.0 + angle * 6.0 + complexity * 5.0);
-            return (spiral + 1.0) * 0.5;
+            float spiral = sin(radius * 12.0 + angle * 8.0 + complexity * 6.0);
+            float rings = cos(radius * 15.0 + complexity * 3.0);
+            return (spiral + rings) * 0.25 + 0.5;
         }
     }
 }
@@ -242,12 +259,35 @@ fragment float4 particleFragmentShader(VertexOut in [[stage_in]]) {
     // Create color based on pattern and generation
     float4 baseColor = in.color;
     
-    // Add pattern-based color variation
+    // Apply fractal-type-specific color and intensity modifications
     float hueShift = combinedPattern * 0.3 + float(in.generation) * 0.1;
-    baseColor.rgb = mix(baseColor.rgb, baseColor.bgr, hueShift);
-    
-    // Apply intensity based on pattern
     float intensity = combinedPattern * (0.5 + in.complexity * 0.5);
+    
+    switch (in.fractalType) {
+        case 0: { // Mandelbrot - Rich, deep colors with high contrast
+            baseColor.rgb = mix(baseColor.rgb, baseColor.brg, hueShift * 0.8);
+            intensity *= 1.2; // Higher intensity for dramatic effect
+            baseColor.rgb *= float3(1.1, 0.9, 1.0); // Slight purple/magenta tint
+            break;
+        }
+        case 1: { // Julia - Smooth, flowing colors
+            baseColor.rgb = mix(baseColor.rgb, baseColor.gbr, hueShift * 0.6);
+            intensity = smoothstep(0.0, 1.0, intensity); // Smoother transitions
+            baseColor.rgb *= float3(0.9, 1.1, 1.0); // Slight green/cyan tint
+            break;
+        }
+        case 2: { // Burning Ship - Sharp, fiery colors
+            baseColor.rgb = mix(baseColor.rgb, baseColor.rbg, hueShift * 1.2);
+            intensity = pow(intensity, 0.7); // More dramatic contrast
+            baseColor.rgb *= float3(1.2, 1.0, 0.8); // Orange/red tint for "burning" effect
+            break;
+        }
+        default: { // Spiral - Rhythmic color variations
+            baseColor.rgb = mix(baseColor.rgb, baseColor.bgr, hueShift * 0.5);
+            intensity = abs(sin(intensity * 3.14159 * 2.0)) * 0.8 + 0.2; // Rhythmic intensity
+            break;
+        }
+    }
     
     // Final color with enhanced blending
     float4 finalColor = baseColor;
