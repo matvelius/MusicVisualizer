@@ -93,7 +93,7 @@ struct AudioVisualizerServiceTests {
         #expect(mockAudioEngine.stopEngineCalled == true)
     }
     
-    @Test func testAudioDataProcessing_convertsToFrequencyBands() throws {
+    @Test func testAudioDataProcessing_convertsToFrequencyBands() async throws {
         let mockFFTProcessor = MockFFTProcessorForVisualizer()
         let mockBinExtractor = MockFrequencyBinExtractorForVisualizer()
         let service = AudioVisualizerService(
@@ -101,6 +101,9 @@ struct AudioVisualizerServiceTests {
             fftProcessor: mockFFTProcessor,
             binExtractor: mockBinExtractor
         )
+        
+        // Set service to running state to bypass isRunning check
+        service.forceRunningState(true)
         
         let inputBuffer = [Float](repeating: 0.5, count: 1024)
         mockFFTProcessor.mockMagnitudes = [0.1, 0.5, 0.8, 0.3, 0.2]
@@ -112,6 +115,9 @@ struct AudioVisualizerServiceTests {
         }
         
         service.processAudioBuffer(inputBuffer)
+        
+        // Allow time for async processing and main queue dispatch
+        try await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
         
         #expect(mockFFTProcessor.processAudioBufferCalled == true)
         #expect(mockBinExtractor.extractBinsCalled == true)
@@ -131,6 +137,9 @@ struct AudioVisualizerServiceTests {
             binExtractor: mockBinExtractor
         )
         
+        // Set service to running state to bypass isRunning check
+        service.forceRunningState(true)
+        
         mockFFTProcessor.mockMagnitudes = [0.1, 0.5, 0.8, 0.3, 0.2]
         mockBinExtractor.mockBins = [0.2, 0.6, 0.9]
         
@@ -145,7 +154,7 @@ struct AudioVisualizerServiceTests {
         let testData: [Float] = [0.1, 0.5, 0.8]
         service.processAudioBuffer(testData)
         
-        // Allow time for main queue dispatch
+        // Allow time for async processing and main queue dispatch
         try await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
         
         #expect(callbackCount >= 1)

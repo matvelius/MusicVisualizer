@@ -78,11 +78,11 @@ class AudioVisualizerService {
     }
     
     private func setupAudioTap() {
-        // Optimize buffer size for 60fps: 44100 / 60 ≈ 735, round up to power of 2
+        // Optimize buffer size for 60fps
         let bufferSize = 1024
-        let format = AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 1)
+        // Use nil format to automatically match hardware format and avoid sample rate mismatches
         
-        audioEngineService.installTap(onBus: 0, bufferSize: bufferSize, format: format) { [weak self] buffer, time in
+        audioEngineService.installTap(onBus: 0, bufferSize: bufferSize, format: nil) { [weak self] buffer, time in
             // Process on audio queue to avoid blocking
             self?.handleAudioBuffer(buffer)
         }
@@ -137,16 +137,17 @@ class AudioVisualizerService {
     // MARK: - Audio Filters
     
     private func setupAudioFilters() {
-        // Initialize high-pass filter with current settings
-        if settingsManager.highPassFilterEnabled {
-            highPassFilter = HighPassFilter(cutoffFrequency: settingsManager.highPassCutoffFrequency, sampleRate: 44100)
-        }
+        // Filters will be initialized lazily when we know the actual sample rate
+        // from the first audio buffer
     }
     
     private func applyHighPassFilter(to buffer: [Float]) -> [Float] {
+        // Get actual hardware sample rate from audio session
+        let actualSampleRate = Float(AVAudioSession.sharedInstance().sampleRate)
+        
         guard let filter = highPassFilter else {
-            // Create filter if needed
-            highPassFilter = HighPassFilter(cutoffFrequency: settingsManager.highPassCutoffFrequency, sampleRate: 44100)
+            // Create filter with actual hardware sample rate
+            highPassFilter = HighPassFilter(cutoffFrequency: settingsManager.highPassCutoffFrequency, sampleRate: actualSampleRate)
             return highPassFilter?.process(buffer) ?? buffer
         }
         

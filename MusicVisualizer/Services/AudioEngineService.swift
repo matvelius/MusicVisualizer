@@ -41,16 +41,22 @@ class AudioEngineService: AudioEngineServiceProtocol {
             #if targetEnvironment(simulator)
             try audioSession.setCategory(.playAndRecord, mode: .default, options: [.allowBluetooth])
             #else
-            try audioSession.setCategory(.record, mode: .measurement, options: [])
+            // Use .measurement mode for better performance on iPad
+            try audioSession.setCategory(.record, mode: .measurement, options: [.allowBluetooth])
             #endif
             
             try audioSession.setActive(true)
             
             inputNode = audioEngine.inputNode
             
+            // Log the actual hardware format for debugging
+            let hwFormat = inputNode?.outputFormat(forBus: 0)
+            print("Hardware audio format: \(hwFormat?.description ?? "unknown")")
+            
             try audioEngine.start()
             return true
         } catch {
+            print("Audio engine start failed: \(error.localizedDescription)")
             return false
         }
     }
@@ -78,10 +84,10 @@ class AudioEngineService: AudioEngineServiceProtocol {
         inputNode.removeTap(onBus: 0)
         
         let bufferSize: UInt32 = 1024
-        let sampleRate = inputNode.outputFormat(forBus: 0).sampleRate
-        let format = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: 1)
+        // Use nil format to automatically match the hardware format
+        // This prevents sample rate mismatch errors on different devices
         
-        inputNode.installTap(onBus: 0, bufferSize: bufferSize, format: format, block: tapBlock)
+        inputNode.installTap(onBus: 0, bufferSize: bufferSize, format: nil, block: tapBlock)
     }
     
     func installTap(onBus bus: Int, bufferSize: Int, format: AVAudioFormat?, block: @escaping (AVAudioPCMBuffer, AVAudioTime) -> Void) {

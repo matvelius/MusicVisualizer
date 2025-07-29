@@ -166,7 +166,10 @@ struct SettingsView: View {
                 }
                 
                 // Fractal Settings
-                Section("Fractal Visualization") {
+                Section {
+                    Text("Fractal Settings")
+                        .font(.headline)
+                        .accessibilityIdentifier("Fractal Settings")
                     VStack(alignment: .leading, spacing: 16) {
                         // Fractal Type Selection
                         VStack(alignment: .leading, spacing: 8) {
@@ -175,10 +178,11 @@ struct SettingsView: View {
                             
                             Picker("Fractal Type", selection: $settingsManager.fractalType) {
                                 Text("Mandelbrot").tag(0)
-                                Text("Julia").tag(1)
+                                Text("Julia Set").tag(1)
                                 Text("Burning Ship").tag(2)
                             }
                             .pickerStyle(SegmentedPickerStyle())
+                            .accessibilityIdentifier("fractalTypePicker")
                             
                             Text("Different mathematical fractals with unique visual characteristics")
                                 .font(.caption)
@@ -206,6 +210,7 @@ struct SettingsView: View {
                                 in: 0.1...3.0,
                                 step: 0.1
                             )
+                            .accessibilityIdentifier("zoomSpeedSlider")
                             
                             Text("Controls how fast the fractal zooms in response to audio")
                                 .font(.caption)
@@ -233,6 +238,7 @@ struct SettingsView: View {
                                 in: 0.1...2.0,
                                 step: 0.1
                             )
+                            .accessibilityIdentifier("colorIntensitySlider")
                             
                             Text("Adjusts the vibrancy of colors in response to audio frequencies")
                                 .font(.caption)
@@ -254,6 +260,7 @@ struct SettingsView: View {
                     }
                 }
             }
+            .accessibilityIdentifier("SettingsView")
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {

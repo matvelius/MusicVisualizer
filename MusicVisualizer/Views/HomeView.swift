@@ -30,8 +30,10 @@ struct HomeView: View {
                         switch settingsManager.visualizationMode {
                         case .bars:
                             EqualizerView(barCount: settingsManager.bandCount, audioVisualizerService: sharedAudioService)
+                                .accessibilityIdentifier("EqualizerView")
                         case .fractals:
                             FractalVisualizerView(audioVisualizerService: sharedAudioService)
+                                .accessibilityIdentifier("FractalVisualizerView")
                         }
                     }
                     .animation(.easeInOut(duration: 0.5), value: settingsManager.visualizationMode)
@@ -53,12 +55,14 @@ struct HomeView: View {
                                 .background(Color.black.opacity(0.3))
                                 .clipShape(Circle())
                         }
+                        .accessibilityIdentifier("gear")
                         .padding(.trailing, 20)
                         .padding(.top, 20)
                     }
                     Spacer()
                 }
             }
+            .accessibilityIdentifier("HomeView")
             .navigationBarHidden(true)
             .statusBarHidden()
         }

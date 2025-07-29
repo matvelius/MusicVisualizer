@@ -31,6 +31,7 @@ struct FractalVisualizerView: View {
                         Text("Fractal Renderer Error")
                             .font(.title2)
                             .fontWeight(.semibold)
+                            .accessibilityIdentifier("Fractal Renderer Error")
                         
                         Text(errorMessage)
                             .font(.body)
@@ -41,6 +42,7 @@ struct FractalVisualizerView: View {
                             initializeFractalRenderer()
                         }
                         .buttonStyle(.borderedProminent)
+                        .accessibilityIdentifier("Retry")
                     }
                     .padding()
                 } else {

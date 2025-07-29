@@ -115,8 +115,13 @@ class SettingsManager {
             self.visualizationMode = .bars
         }
         
-        self.bandCount = userDefaults.object(forKey: Keys.bandCount) as? Int ?? 21
-        self.animationSpeed = userDefaults.object(forKey: Keys.animationSpeed) as? Double ?? 1.0
+        // Validate and load bandCount (must be positive)
+        let savedBandCount = userDefaults.object(forKey: Keys.bandCount) as? Int ?? 21
+        self.bandCount = savedBandCount > 0 ? savedBandCount : 21
+        
+        // Validate and load animationSpeed (must be positive)  
+        let savedAnimationSpeed = userDefaults.object(forKey: Keys.animationSpeed) as? Double ?? 1.0
+        self.animationSpeed = savedAnimationSpeed > 0 ? savedAnimationSpeed : 1.0
         
         // Load audio filter settings
         self.noiseGateEnabled = userDefaults.object(forKey: Keys.noiseGateEnabled) as? Bool ?? false
