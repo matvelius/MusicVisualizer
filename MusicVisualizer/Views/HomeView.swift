@@ -34,6 +34,9 @@ struct HomeView: View {
                         case .fractals:
                             FractalVisualizerView(audioVisualizerService: sharedAudioService)
                                 .accessibilityIdentifier("FractalVisualizerView")
+                        case .tree:
+                            TreeVisualizerView(audioVisualizerService: sharedAudioService)
+                                .accessibilityIdentifier("TreeVisualizerView")
                         }
                     }
                     .animation(.easeInOut(duration: 0.5), value: settingsManager.visualizationMode)

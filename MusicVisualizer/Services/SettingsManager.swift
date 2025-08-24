@@ -156,6 +156,7 @@ class SettingsManager {
 enum VisualizationMode: String, CaseIterable, Identifiable {
     case bars = "bars"
     case fractals = "fractals"
+    case tree = "tree"
     
     var id: String { rawValue }
     
@@ -165,6 +166,8 @@ enum VisualizationMode: String, CaseIterable, Identifiable {
             return "Bars"
         case .fractals:
             return "Fractals"
+        case .tree:
+            return "Tree"
         }
     }
 }
