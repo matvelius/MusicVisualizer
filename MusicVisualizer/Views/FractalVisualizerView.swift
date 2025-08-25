@@ -248,6 +248,49 @@ struct FractalVisualizerView: View {
     private func processAudioForFractals(_ frequencyData: [Float]) -> (low: Float, mid: Float, high: Float, overall: Float) {
         return processAudioForFractalsInline(frequencyData)
     }
+    
+    // MARK: - ProMotion Display Configuration
+    
+    static func configureProMotionDisplay(_ metalView: MTKView) {
+        // Phase 4: Advanced display synchronization with hardware detection
+        if #available(iOS 15.0, macOS 12.0, *) {
+            // Check if ProMotion is available
+            if let screen = UIScreen.main as UIScreen? {
+                let maxRefreshRate = screen.maximumFramesPerSecond
+                
+                if maxRefreshRate >= 120 {
+                    // ProMotion display detected - use adaptive refresh
+                    metalView.preferredFramesPerSecond = maxRefreshRate
+                    print("ProMotion detected: \(maxRefreshRate)Hz")
+                    
+                    // Display sync handled by CAMetalLayer displaySyncEnabled below
+                } else {
+                    // Standard 60Hz display
+                    metalView.preferredFramesPerSecond = 60
+                    print("Standard display: \(maxRefreshRate)Hz")
+                }
+            } else {
+                metalView.preferredFramesPerSecond = 120 // Default to high rate
+            }
+        } else {
+            metalView.preferredFramesPerSecond = 60
+        }
+        
+        // Configure display link for optimal timing
+        metalView.enableSetNeedsDisplay = false  // Use display link instead
+        metalView.isPaused = false
+        
+        // Phase 4: Advanced memory and performance optimizations
+        metalView.framebufferOnly = true  // Optimize for real-time rendering
+        metalView.autoResizeDrawable = true
+        
+        // Configure for minimal latency
+        if let metalLayer = metalView.layer as? CAMetalLayer {
+            // displaySyncEnabled not available - handled by preferredFramesPerSecond
+            metalLayer.presentsWithTransaction = false  // Reduce CPU overhead
+            metalLayer.allowsNextDrawableTimeout = false  // Never timeout
+        }
+    }
 }
 
 // MARK: - Helper Views
@@ -307,12 +350,8 @@ struct GenerativeFractalMetalView: UIViewRepresentable {
         metalView.device = MTLCreateSystemDefaultDevice()
         metalView.delegate = context.coordinator
         
-        // Ultra-low latency settings
-        if #available(iOS 15.0, macOS 12.0, *) {
-            metalView.preferredFramesPerSecond = 120  // Use ProMotion if available
-        } else {
-            metalView.preferredFramesPerSecond = 60
-        }
+        // ProMotion and adaptive refresh rate configuration
+        FractalVisualizerView.configureProMotionDisplay(metalView)
         
         metalView.enableSetNeedsDisplay = false  // Manual control
         metalView.isPaused = false
@@ -363,12 +402,8 @@ struct GPUFractalMetalView: UIViewRepresentable {
         metalView.device = MTLCreateSystemDefaultDevice()
         metalView.delegate = context.coordinator
         
-        // Ultra-low latency settings with enhanced memory optimization
-        if #available(iOS 15.0, macOS 12.0, *) {
-            metalView.preferredFramesPerSecond = 120  // Use ProMotion if available
-        } else {
-            metalView.preferredFramesPerSecond = 60
-        }
+        // ProMotion and adaptive refresh rate configuration
+        FractalVisualizerView.configureProMotionDisplay(metalView)
         
         metalView.enableSetNeedsDisplay = false  // Manual control
         metalView.isPaused = false

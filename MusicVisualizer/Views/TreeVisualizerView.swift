@@ -12,73 +12,57 @@ import Combine
 struct TreeVisualizerView: View {
     let audioVisualizerService: AudioVisualizerService
     @State private var treeRenderer: TreeVisualizationRenderer?
+    // @State private var gpuTreeRenderer: GPUTreeRenderer? // Temporarily disabled
     @State private var cancellables = Set<AnyCancellable>()
     @State private var settingsManager = SettingsManager.shared
     @State private var errorMessage: String?
+    @State private var useGPURenderer: Bool = false // Phase 4: Enable GPU tree rendering (temporarily disabled)
     
     var body: some View {
         GeometryReader { geometry in
             ZStack {
+                // Phase 4: Using CPU tree renderer with ProMotion optimizations
                 if let treeRenderer = treeRenderer {
                     TreeVisualizationMetalView(renderer: treeRenderer)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else if let errorMessage = errorMessage {
-                    VStack(spacing: 20) {
-                        Image(systemName: "exclamationmark.triangle")
-                            .font(.system(size: 50))
-                            .foregroundColor(.orange)
-                        
-                        Text("Tree Renderer Error")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                            .accessibilityIdentifier("Tree Renderer Error")
-                        
-                        Text(errorMessage)
-                            .font(.body)
-                            .multilineTextAlignment(.center)
-                            .foregroundColor(.secondary)
-                        
-                        Button("Retry") {
-                            initializeTreeRenderer()
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .accessibilityIdentifier("Retry")
+                    ErrorView(message: errorMessage) {
+                        initializeCPUTreeRenderer()
                     }
-                    .padding()
                 } else {
-                    VStack(spacing: 20) {
-                        ProgressView()
-                            .scaleEffect(1.5)
-                        
-                        Text("Growing the Tree of Life...")
-                            .font(.title3)
-                            .foregroundColor(.secondary)
-                    }
+                    LoadingView(message: "Growing the Tree of Life...")
                 }
                 
                 // Debug info overlay (only in debug builds)
                 #if DEBUG
-                if let treeRenderer = treeRenderer {
-                    VStack {
-                        HStack {
+                VStack {
+                    HStack {
+                        if useGPURenderer {
+                            Text("GPU Tree Renderer Active")
+                                .font(.caption)
+                                .foregroundColor(.green.opacity(0.8))
+                                .padding(8)
+                                .background(Color.black.opacity(0.5))
+                                .cornerRadius(8)
+                        } else if let treeRenderer = treeRenderer {
                             Text(treeRenderer.debugInfo)
                                 .font(.caption)
                                 .foregroundColor(.white.opacity(0.7))
                                 .padding(8)
                                 .background(Color.black.opacity(0.5))
                                 .cornerRadius(8)
-                            Spacer()
                         }
                         Spacer()
                     }
-                    .padding()
+                    Spacer()
                 }
+                .padding()
                 #endif
             }
         }
         .background(Color.black)
         .onAppear {
-            initializeTreeRenderer()
+            initializeCPUTreeRenderer()
             setupAudioVisualization()
             setupBackgroundStateHandling()
         }
@@ -89,7 +73,34 @@ struct TreeVisualizerView: View {
         .accessibilityLabel("Tree music visualizer")
     }
     
-    private func initializeTreeRenderer() {
+    // Phase 4 GPU renderer functions - temporarily disabled
+    /*
+    private func initializeRenderers() {
+        if useGPURenderer {
+            initializeGPUTreeRenderer()
+        } else {
+            initializeCPUTreeRenderer()
+        }
+    }
+    
+    private func initializeGPUTreeRenderer() {
+        do {
+            let renderer = try GPUTreeRenderer()
+            self.gpuTreeRenderer = renderer
+            self.errorMessage = nil
+        } catch {
+            self.errorMessage = error.localizedDescription
+            print("Failed to initialize GPUTreeRenderer: \(error)")
+            
+            // Fallback to CPU renderer
+            print("Falling back to CPU tree renderer...")
+            useGPURenderer = false
+            initializeCPUTreeRenderer()
+        }
+    }
+    */
+    
+    private func initializeCPUTreeRenderer() {
         do {
             let renderer = try TreeVisualizationRenderer()
             self.treeRenderer = renderer
@@ -102,14 +113,12 @@ struct TreeVisualizerView: View {
     
     private func setupAudioVisualization() {
         // Connect audio data to tree parameters
-        audioVisualizerService.onFrequencyDataUpdate = { [weak treeRenderer] frequencyData in
-            guard let renderer = treeRenderer else { return }
-            
+        audioVisualizerService.onFrequencyDataUpdate = { frequencyData in
             // Process audio data for tree parameters
-            let audioData = processAudioForTree(frequencyData)
+            let audioData = self.processAudioForTree(frequencyData)
             
-            // Update tree renderer with audio data
-            renderer.updateAudioData(
+            // Update tree renderer with audio data  
+            self.treeRenderer?.updateAudioData(
                 low: audioData.low,
                 mid: audioData.mid,
                 high: audioData.high,
@@ -129,25 +138,25 @@ struct TreeVisualizerView: View {
         // Pause/resume tree animation based on app state
         NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)
             .sink { _ in
-                treeRenderer?.isAnimating = false
+                self.treeRenderer?.isAnimating = false
             }
             .store(in: &cancellables)
         
         NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)
             .sink { _ in
-                treeRenderer?.isAnimating = true
+                self.treeRenderer?.isAnimating = true
             }
             .store(in: &cancellables)
         
         NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
             .sink { _ in
-                treeRenderer?.isAnimating = false
+                self.treeRenderer?.isAnimating = false
             }
             .store(in: &cancellables)
         
         NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
             .sink { _ in
-                treeRenderer?.isAnimating = true
+                self.treeRenderer?.isAnimating = true
             }
             .store(in: &cancellables)
     }
@@ -186,6 +195,9 @@ struct TreeVisualizerView: View {
     }
 }
 
+// MARK: - Error and Loading Views (references from FractalVisualizerView)
+// ErrorView and LoadingView are defined in FractalVisualizerView.swift - no duplication needed
+
 // MARK: - Metal View Integration
 
 struct TreeVisualizationMetalView: UIViewRepresentable {
@@ -195,13 +207,47 @@ struct TreeVisualizationMetalView: UIViewRepresentable {
         let metalView = MTKView()
         metalView.device = MTLCreateSystemDefaultDevice()
         metalView.delegate = context.coordinator
-        metalView.preferredFramesPerSecond = 60
+        
+        // Apply Phase 4 ProMotion optimizations
+        configureProMotionDisplay(metalView)
+        
         metalView.enableSetNeedsDisplay = false
         metalView.isPaused = false
         metalView.framebufferOnly = false
         metalView.clearColor = MTLClearColor(red: 0, green: 0, blue: 0, alpha: 1)
         
         return metalView
+    }
+    
+    private func configureProMotionDisplay(_ metalView: MTKView) {
+        // Phase 4: ProMotion display configuration for Tree visualization
+        if #available(iOS 15.0, macOS 12.0, *) {
+            if let screen = UIScreen.main as UIScreen? {
+                let maxRefreshRate = screen.maximumFramesPerSecond
+                
+                if maxRefreshRate >= 120 {
+                    // ProMotion display detected
+                    metalView.preferredFramesPerSecond = maxRefreshRate
+                    print("ProMotion Tree Rendering: \(maxRefreshRate)Hz")
+                    
+                    if #available(iOS 15.0, *) {
+                        // Display sync handled by CAMetalLayer
+                    }
+                } else {
+                    metalView.preferredFramesPerSecond = 60
+                }
+            } else {
+                metalView.preferredFramesPerSecond = 120
+            }
+        } else {
+            metalView.preferredFramesPerSecond = 60
+        }
+        
+        // Configure for optimal tree rendering
+        if let metalLayer = metalView.layer as? CAMetalLayer {
+            // displaySyncEnabled not available - handled by preferredFramesPerSecond
+            metalLayer.presentsWithTransaction = false
+        }
     }
     
     func updateUIView(_ uiView: MTKView, context: Context) {
@@ -230,6 +276,94 @@ struct TreeVisualizationMetalView: UIViewRepresentable {
             }
             
             // Render tree visualization
+            renderer.render(to: drawable, in: view)
+        }
+    }
+}
+
+// MARK: - GPU Tree Metal View
+
+struct GPUTreeMetalView: UIViewRepresentable {
+    let renderer: GPUTreeRenderer
+    
+    func makeUIView(context: Context) -> MTKView {
+        let metalView = MTKView()
+        metalView.device = MTLCreateSystemDefaultDevice()
+        metalView.delegate = context.coordinator
+        
+        // Apply Phase 4 ProMotion optimizations for GPU tree rendering
+        configureProMotionDisplay(metalView)
+        
+        metalView.enableSetNeedsDisplay = false
+        metalView.isPaused = false
+        metalView.framebufferOnly = true  // GPU rendering can be more aggressive
+        metalView.clearColor = MTLClearColor(red: 0, green: 0, blue: 0, alpha: 1)
+        
+        // Configure for triple buffering
+        if let metalLayer = metalView.layer as? CAMetalLayer {
+            metalLayer.maximumDrawableCount = 3
+        }
+        
+        return metalView
+    }
+    
+    private func configureProMotionDisplay(_ metalView: MTKView) {
+        // Phase 4: Advanced ProMotion configuration for GPU tree rendering
+        if #available(iOS 15.0, macOS 12.0, *) {
+            if let screen = UIScreen.main as UIScreen? {
+                let maxRefreshRate = screen.maximumFramesPerSecond
+                
+                if maxRefreshRate >= 120 {
+                    metalView.preferredFramesPerSecond = maxRefreshRate
+                    print("GPU Tree ProMotion: \(maxRefreshRate)Hz")
+                    
+                    if #available(iOS 15.0, *) {
+                        // Display sync handled by CAMetalLayer
+                    }
+                } else {
+                    metalView.preferredFramesPerSecond = 60
+                }
+            } else {
+                metalView.preferredFramesPerSecond = 120
+            }
+        } else {
+            metalView.preferredFramesPerSecond = 60
+        }
+        
+        // GPU-specific optimizations
+        if let metalLayer = metalView.layer as? CAMetalLayer {
+            // displaySyncEnabled not available - handled by preferredFramesPerSecond
+            metalLayer.presentsWithTransaction = false
+            metalLayer.allowsNextDrawableTimeout = false
+        }
+    }
+    
+    func updateUIView(_ uiView: MTKView, context: Context) {
+        // Update any necessary view properties
+    }
+    
+    func makeCoordinator() -> GPUTreeCoordinator {
+        GPUTreeCoordinator(renderer: renderer)
+    }
+    
+    class GPUTreeCoordinator: NSObject, MTKViewDelegate {
+        let renderer: GPUTreeRenderer
+        
+        init(renderer: GPUTreeRenderer) {
+            self.renderer = renderer
+        }
+        
+        func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
+            // Handle size changes if needed
+        }
+        
+        func draw(in view: MTKView) {
+            guard renderer.isAnimating,
+                  let drawable = view.currentDrawable else {
+                return
+            }
+            
+            // Render GPU-computed tree visualization
             renderer.render(to: drawable, in: view)
         }
     }
