@@ -74,15 +74,16 @@ vertex VertexOut particleVertexShader(VertexIn in [[stage_in]],
 
 // MARK: - Fractal Generation Functions
 
-float2 complexSquare(float2 z) {
+// Local complex math functions for GenerativeFractals (to avoid conflicts with FractalCompute.metal)
+float2 localComplexSquare(float2 z) {
     return float2(z.x * z.x - z.y * z.y, 2.0 * z.x * z.y);
 }
 
-float2 complexMult(float2 a, float2 b) {
+float2 localComplexMult(float2 a, float2 b) {
     return float2(a.x * b.x - a.y * b.y, a.x * b.y + a.y * b.x);
 }
 
-float complexLength(float2 z) {
+float localComplexLength(float2 z) {
     return sqrt(z.x * z.x + z.y * z.y);
 }
 
@@ -101,12 +102,12 @@ float generateFractalPattern(float2 coord, int fractalType, float complexity, in
             float smoothValue = 0.0;
             
             for (int i = 0; i < maxIter; i++) {
-                float length_z = complexLength(z);
+                float length_z = localComplexLength(z);
                 if (length_z > 4.0) { // Higher escape radius for smoother patterns
                     smoothValue = float(i) - log2(log2(length_z));
                     return smoothValue / float(maxIter);
                 }
-                z = complexSquare(z) + c;
+                z = localComplexSquare(z) + c;
             }
             return 1.0;
         }
@@ -121,12 +122,12 @@ float generateFractalPattern(float2 coord, int fractalType, float complexity, in
             float smoothValue = 0.0;
             
             for (int i = 0; i < maxIter; i++) {
-                float length_z = complexLength(z);
+                float length_z = localComplexLength(z);
                 if (length_z > 4.0) {
                     smoothValue = float(i) - log2(log2(length_z));
                     return smoothValue / float(maxIter);
                 }
-                z = complexSquare(z) + juliaC;
+                z = localComplexSquare(z) + juliaC;
             }
             return 1.0;
         }
@@ -139,14 +140,14 @@ float generateFractalPattern(float2 coord, int fractalType, float complexity, in
             float smoothValue = 0.0;
             
             for (int i = 0; i < maxIter; i++) {
-                float length_z = complexLength(z);
+                float length_z = localComplexLength(z);
                 if (length_z > 4.0) {
                     smoothValue = float(i) - log2(log2(length_z));
                     return smoothValue / float(maxIter);
                 }
                 // The key difference: absolute values create the "burning" effect
                 z = float2(abs(z.x), abs(z.y));
-                z = complexSquare(z) + c;
+                z = localComplexSquare(z) + c;
             }
             return 1.0;
         }
@@ -310,3 +311,5 @@ fragment float4 particleFragmentShader(VertexOut in [[stage_in]]) {
     
     return finalColor;
 }
+
+// Note: Full-screen quad shaders moved to FractalCompute.metal to avoid duplication

@@ -13,54 +13,45 @@ import QuartzCore
 struct FractalVisualizerView: View {
     let audioVisualizerService: AudioVisualizerService
     @State private var fractalRenderer: GenerativeFractalRenderer?
+    @State private var gpuFractalRenderer: GPUFractalRenderer?
     @State private var cancellables = Set<AnyCancellable>()
     @State private var settingsManager = SettingsManager.shared
     @State private var errorMessage: String?
+    @State private var useGPURenderer: Bool = true // Phase 2: Enable GPU rendering by default
     
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                if let fractalRenderer = fractalRenderer {
+                if useGPURenderer {
+                    if let gpuRenderer = gpuFractalRenderer {
+                        GPUFractalMetalView(renderer: gpuRenderer)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    } else if let errorMessage = errorMessage {
+                        ErrorView(message: errorMessage) {
+                            initializeGPUFractalRenderer()
+                        }
+                    } else {
+                        LoadingView(message: "Initializing GPU Fractal Engine...")
+                    }
+                } else if let fractalRenderer = fractalRenderer {
                     GenerativeFractalMetalView(renderer: fractalRenderer)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else if let errorMessage = errorMessage {
-                    VStack(spacing: 20) {
-                        Image(systemName: "exclamationmark.triangle")
-                            .font(.system(size: 50))
-                            .foregroundColor(.orange)
-                        
-                        Text("Fractal Renderer Error")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                            .accessibilityIdentifier("Fractal Renderer Error")
-                        
-                        Text(errorMessage)
-                            .font(.body)
-                            .multilineTextAlignment(.center)
-                            .foregroundColor(.secondary)
-                        
-                        Button("Retry") {
-                            initializeFractalRenderer()
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .accessibilityIdentifier("Retry")
+                    ErrorView(message: errorMessage) {
+                        initializeFractalRenderer()
                     }
-                    .padding()
                 } else {
-                    VStack(spacing: 20) {
-                        ProgressView()
-                            .scaleEffect(1.5)
-                        
-                        Text("Initializing Generative Fractal Engine...")
-                            .font(.title3)
-                            .foregroundColor(.secondary)
-                    }
+                    LoadingView(message: "Initializing Generative Fractal Engine...")
                 }
             }
         }
         .background(Color.black)
         .onAppear {
-            initializeFractalRenderer()
+            if useGPURenderer {
+                initializeGPUFractalRenderer()
+            } else {
+                initializeFractalRenderer()
+            }
             setupAudioVisualization()
             setupBackgroundStateHandling()
         }
@@ -69,6 +60,22 @@ struct FractalVisualizerView: View {
         }
         .accessibilityIdentifier("FractalVisualizerView")
         .accessibilityLabel("Fractal music visualizer")
+    }
+    
+    private func initializeGPUFractalRenderer() {
+        do {
+            let renderer = try GPUFractalRenderer()
+            self.gpuFractalRenderer = renderer
+            self.errorMessage = nil
+        } catch {
+            self.errorMessage = error.localizedDescription
+            print("Failed to initialize GPUFractalRenderer: \(error)")
+            
+            // Fallback to CPU renderer
+            print("Falling back to CPU particle renderer...")
+            useGPURenderer = false
+            initializeFractalRenderer()
+        }
     }
     
     private func initializeFractalRenderer() {
@@ -84,23 +91,14 @@ struct FractalVisualizerView: View {
     
     private func setupAudioVisualization() {
         // Connect audio data to fractal parameters - ultra-low latency path
-        audioVisualizerService.onFrequencyDataUpdate = { [weak fractalRenderer] frequencyData in
-            guard let renderer = fractalRenderer else { return }
-            
+        audioVisualizerService.onFrequencyDataUpdate = { frequencyData in
             // Process audio data for fractals (inline for speed)
             let audioData = self.processAudioForFractalsInline(frequencyData)
             
-            // Direct update without main queue dispatch for minimum latency
-            if Thread.isMainThread {
-                renderer.updateAudioData(
-                    low: audioData.low,
-                    mid: audioData.mid,
-                    high: audioData.high,
-                    overall: audioData.overall
-                )
-            } else {
-                // If called from audio thread, dispatch to main queue
-                DispatchQueue.main.async {
+            // Update appropriate renderer based on current mode
+            if self.useGPURenderer {
+                if let renderer = self.gpuFractalRenderer {
+                    // GPU renderer can handle cross-thread calls efficiently
                     renderer.updateAudioData(
                         low: audioData.low,
                         mid: audioData.mid,
@@ -108,13 +106,38 @@ struct FractalVisualizerView: View {
                         overall: audioData.overall
                     )
                 }
+            } else {
+                if let renderer = self.fractalRenderer {
+                    // CPU renderer update path
+                    if Thread.isMainThread {
+                        renderer.updateAudioData(
+                            low: audioData.low,
+                            mid: audioData.mid,
+                            high: audioData.high,
+                            overall: audioData.overall
+                        )
+                    } else {
+                        DispatchQueue.main.async {
+                            renderer.updateAudioData(
+                                low: audioData.low,
+                                mid: audioData.mid,
+                                high: audioData.high,
+                                overall: audioData.overall
+                            )
+                        }
+                    }
+                }
             }
         }
         
         // Monitor fractal type changes using UserDefaults
         NotificationCenter.default.publisher(for: UserDefaults.didChangeNotification)
-            .sink { [weak fractalRenderer] _ in
-                fractalRenderer?.updateFractalType()
+            .sink { _ in
+                if self.useGPURenderer {
+                    self.gpuFractalRenderer?.updateFractalType()
+                } else {
+                    self.fractalRenderer?.updateFractalType()
+                }
             }
             .store(in: &cancellables)
     }
@@ -123,32 +146,52 @@ struct FractalVisualizerView: View {
         // Pause/resume fractal animation based on app state
         NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)
             .sink { _ in
-                fractalRenderer?.isAnimating = false
+                if self.useGPURenderer {
+                    self.gpuFractalRenderer?.isAnimating = false
+                } else {
+                    self.fractalRenderer?.isAnimating = false
+                }
             }
             .store(in: &cancellables)
         
         NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)
             .sink { _ in
-                fractalRenderer?.isAnimating = true
+                if self.useGPURenderer {
+                    self.gpuFractalRenderer?.isAnimating = true
+                } else {
+                    self.fractalRenderer?.isAnimating = true
+                }
             }
             .store(in: &cancellables)
         
         NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
             .sink { _ in
-                fractalRenderer?.isAnimating = false
+                if self.useGPURenderer {
+                    self.gpuFractalRenderer?.isAnimating = false
+                } else {
+                    self.fractalRenderer?.isAnimating = false
+                }
             }
             .store(in: &cancellables)
         
         NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
             .sink { _ in
-                fractalRenderer?.isAnimating = true
+                if self.useGPURenderer {
+                    self.gpuFractalRenderer?.isAnimating = true
+                } else {
+                    self.fractalRenderer?.isAnimating = true
+                }
             }
             .store(in: &cancellables)
     }
     
     private func cleanupVisualization() {
         cancellables.removeAll()
-        fractalRenderer?.isAnimating = false
+        if useGPURenderer {
+            gpuFractalRenderer?.isAnimating = false
+        } else {
+            fractalRenderer?.isAnimating = false
+        }
     }
     
     private func processAudioForFractalsInline(_ frequencyData: [Float]) -> (low: Float, mid: Float, high: Float, overall: Float) {
@@ -207,6 +250,53 @@ struct FractalVisualizerView: View {
     }
 }
 
+// MARK: - Helper Views
+
+struct ErrorView: View {
+    let message: String
+    let retryAction: () -> Void
+    
+    var body: some View {
+        VStack(spacing: 20) {
+            Image(systemName: "exclamationmark.triangle")
+                .font(.system(size: 50))
+                .foregroundColor(.orange)
+            
+            Text("Fractal Renderer Error")
+                .font(.title2)
+                .fontWeight(.semibold)
+                .accessibilityIdentifier("Fractal Renderer Error")
+            
+            Text(message)
+                .font(.body)
+                .multilineTextAlignment(.center)
+                .foregroundColor(.secondary)
+            
+            Button("Retry") {
+                retryAction()
+            }
+            .buttonStyle(.borderedProminent)
+            .accessibilityIdentifier("Retry")
+        }
+        .padding()
+    }
+}
+
+struct LoadingView: View {
+    let message: String
+    
+    var body: some View {
+        VStack(spacing: 20) {
+            ProgressView()
+                .scaleEffect(1.5)
+            
+            Text(message)
+                .font(.title3)
+                .foregroundColor(.secondary)
+        }
+    }
+}
+
 // MARK: - Metal View Integration
 
 struct GenerativeFractalMetalView: UIViewRepresentable {
@@ -258,6 +348,62 @@ struct GenerativeFractalMetalView: UIViewRepresentable {
             }
             
             // Render generative fractals
+            renderer.render(to: drawable, in: view)
+        }
+    }
+}
+
+// MARK: - GPU Metal View Integration
+
+struct GPUFractalMetalView: UIViewRepresentable {
+    let renderer: GPUFractalRenderer
+    
+    func makeUIView(context: Context) -> MTKView {
+        let metalView = MTKView()
+        metalView.device = MTLCreateSystemDefaultDevice()
+        metalView.delegate = context.coordinator
+        
+        // Ultra-low latency settings
+        if #available(iOS 15.0, macOS 12.0, *) {
+            metalView.preferredFramesPerSecond = 120  // Use ProMotion if available
+        } else {
+            metalView.preferredFramesPerSecond = 60
+        }
+        
+        metalView.enableSetNeedsDisplay = false  // Manual control
+        metalView.isPaused = false
+        metalView.framebufferOnly = true  // Optimize for performance
+        metalView.clearColor = MTLClearColor(red: 0, green: 0, blue: 0, alpha: 1)
+        
+        return metalView
+    }
+    
+    func updateUIView(_ uiView: MTKView, context: Context) {
+        // Update any necessary view properties
+    }
+    
+    func makeCoordinator() -> GPUCoordinator {
+        GPUCoordinator(renderer: renderer)
+    }
+    
+    class GPUCoordinator: NSObject, MTKViewDelegate {
+        let renderer: GPUFractalRenderer
+        
+        init(renderer: GPUFractalRenderer) {
+            self.renderer = renderer
+        }
+        
+        func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
+            // Handle size changes if needed
+        }
+        
+        func draw(in view: MTKView) {
+            guard renderer.isAnimating,
+                  let drawable = view.currentDrawable else {
+                return
+            }
+            
+            // Render GPU-computed fractals
             renderer.render(to: drawable, in: view)
         }
     }
