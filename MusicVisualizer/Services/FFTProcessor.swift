@@ -25,7 +25,7 @@ class FFTProcessor: FFTProcessorProtocol {
     private var realOutput: [Float]
     private var imaginaryOutput: [Float]
     
-    init(bufferSize: Int = 1024) {
+    init(bufferSize: Int = 512) {
         self.bufferSize = bufferSize
         self.log2BufferSize = vDSP_Length(log2(Float(bufferSize)))
         
@@ -79,6 +79,12 @@ class FFTProcessor: FFTProcessorProtocol {
     func processAudioBuffer(_ buffer: [Float]) -> [Float] {
         let frameCount = min(buffer.count, bufferSize)
         
+        // Ultra-fast processing: minimize memory operations
+        if frameCount <= 64 {
+            // For small buffers, use optimized path
+            return processSmallBuffer(buffer, frameCount: frameCount)
+        }
+        
         // Optimized copy using withUnsafeMutableBufferPointer for better performance
         realInput.withUnsafeMutableBufferPointer { realPtr in
             imaginaryInput.withUnsafeMutableBufferPointer { imagPtr in
@@ -105,6 +111,55 @@ class FFTProcessor: FFTProcessorProtocol {
         
         // Calculate magnitudes (only return first half due to symmetry)
         return calculateMagnitudes()
+    }
+    
+    private func processSmallBuffer(_ buffer: [Float], frameCount: Int) -> [Float] {
+        // For small buffers (like 64 samples), use minimal processing
+        let paddedSize = max(128, nextPowerOfTwo(frameCount))
+        
+        // Create temporary arrays for small buffer processing
+        var tempReal = Array(repeating: Float(0.0), count: paddedSize)
+        var tempImag = Array(repeating: Float(0.0), count: paddedSize)
+        var tempRealOut = Array(repeating: Float(0.0), count: paddedSize)
+        var tempImagOut = Array(repeating: Float(0.0), count: paddedSize)
+        
+        // Copy and pad input
+        for i in 0..<frameCount {
+            tempReal[i] = buffer[i]
+        }
+        
+        // Apply minimal windowing for small buffers
+        for i in 0..<frameCount {
+            let window = 0.5 * (1.0 - cos(2.0 * .pi * Float(i) / Float(frameCount - 1)))
+            tempReal[i] *= window
+        }
+        
+        // Create temporary FFT setup
+        let tempSetup = vDSP_DFT_zop_CreateSetup(nil, vDSP_Length(paddedSize), .FORWARD)!
+        defer { vDSP_DFT_DestroySetup(tempSetup) }
+        
+        // Perform FFT
+        vDSP_DFT_Execute(tempSetup, tempReal, tempImag, &tempRealOut, &tempImagOut)
+        
+        // Calculate magnitudes
+        let halfSize = paddedSize / 2
+        var magnitudes = [Float](repeating: 0.0, count: halfSize)
+        
+        for i in 0..<halfSize {
+            let real = tempRealOut[i]
+            let imaginary = tempImagOut[i]
+            magnitudes[i] = sqrt(real * real + imaginary * imaginary)
+        }
+        
+        return magnitudes
+    }
+    
+    private func nextPowerOfTwo(_ n: Int) -> Int {
+        var power = 1
+        while power < n {
+            power <<= 1
+        }
+        return power
     }
     
     private func applyHannWindow() {

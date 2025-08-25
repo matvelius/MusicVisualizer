@@ -40,9 +40,16 @@ class AudioEngineService: AudioEngineServiceProtocol {
             
             #if targetEnvironment(simulator)
             try audioSession.setCategory(.playAndRecord, mode: .default, options: [.allowBluetooth])
+            // Simulator: use default buffer duration
             #else
-            // Use .measurement mode for better performance on iPad
+            // Ultra-low latency configuration for real devices
             try audioSession.setCategory(.record, mode: .measurement, options: [.allowBluetooth])
+            
+            // Set minimum possible buffer duration (64 samples at 44.1kHz = ~1.45ms)
+            try audioSession.setPreferredIOBufferDuration(0.00145)
+            
+            // Set preferred sample rate for consistency
+            try audioSession.setPreferredSampleRate(44100.0)
             #endif
             
             try audioSession.setActive(true)
@@ -51,7 +58,9 @@ class AudioEngineService: AudioEngineServiceProtocol {
             
             // Log the actual hardware format for debugging
             let hwFormat = inputNode?.outputFormat(forBus: 0)
+            let actualBufferDuration = audioSession.ioBufferDuration
             print("Hardware audio format: \(hwFormat?.description ?? "unknown")")
+            print("Actual IO buffer duration: \(actualBufferDuration * 1000.0)ms")
             
             try audioEngine.start()
             return true
@@ -83,7 +92,8 @@ class AudioEngineService: AudioEngineServiceProtocol {
         // Remove any existing taps first to prevent "nullptr == Tap()" crash
         inputNode.removeTap(onBus: 0)
         
-        let bufferSize: UInt32 = 1024
+        // Ultra-low latency: 64 samples buffer
+        let bufferSize: UInt32 = 64
         // Use nil format to automatically match the hardware format
         // This prevents sample rate mismatch errors on different devices
         

@@ -8,6 +8,7 @@
 import SwiftUI
 import MetalKit
 import Combine
+import QuartzCore
 
 struct FractalVisualizerView: View {
     let audioVisualizerService: AudioVisualizerService
@@ -82,20 +83,32 @@ struct FractalVisualizerView: View {
     }
     
     private func setupAudioVisualization() {
-        // Connect audio data to fractal parameters
+        // Connect audio data to fractal parameters - ultra-low latency path
         audioVisualizerService.onFrequencyDataUpdate = { [weak fractalRenderer] frequencyData in
             guard let renderer = fractalRenderer else { return }
             
-            // Process audio data for fractal parameters
-            let audioData = processAudioForFractals(frequencyData)
+            // Process audio data for fractals (inline for speed)
+            let audioData = self.processAudioForFractalsInline(frequencyData)
             
-            // Update fractal renderer with audio data
-            renderer.updateAudioData(
-                low: audioData.low,
-                mid: audioData.mid,
-                high: audioData.high,
-                overall: audioData.overall
-            )
+            // Direct update without main queue dispatch for minimum latency
+            if Thread.isMainThread {
+                renderer.updateAudioData(
+                    low: audioData.low,
+                    mid: audioData.mid,
+                    high: audioData.high,
+                    overall: audioData.overall
+                )
+            } else {
+                // If called from audio thread, dispatch to main queue
+                DispatchQueue.main.async {
+                    renderer.updateAudioData(
+                        low: audioData.low,
+                        mid: audioData.mid,
+                        high: audioData.high,
+                        overall: audioData.overall
+                    )
+                }
+            }
         }
         
         // Monitor fractal type changes using UserDefaults
@@ -138,7 +151,7 @@ struct FractalVisualizerView: View {
         fractalRenderer?.isAnimating = false
     }
     
-    private func processAudioForFractals(_ frequencyData: [Float]) -> (low: Float, mid: Float, high: Float, overall: Float) {
+    private func processAudioForFractalsInline(_ frequencyData: [Float]) -> (low: Float, mid: Float, high: Float, overall: Float) {
         guard !frequencyData.isEmpty else {
             return (low: 0.0, mid: 0.0, high: 0.0, overall: 0.0)
         }
@@ -149,21 +162,48 @@ struct FractalVisualizerView: View {
         let midEnd = count * 3 / 4
         let highStart = midEnd
         
-        // Calculate frequency band averages
-        let lowFreq = Array(frequencyData[0..<lowEnd]).reduce(0, +) / Float(lowEnd)
-        let midFreq = Array(frequencyData[midStart..<midEnd]).reduce(0, +) / Float(midEnd - midStart)
-        let highFreq = Array(frequencyData[highStart..<count]).reduce(0, +) / Float(count - highStart)
+        // Optimized frequency band calculation using unsafe buffer pointer
+        var lowSum: Float = 0
+        var midSum: Float = 0
+        var highSum: Float = 0
+        var overallSum: Float = 0
         
-        // Calculate overall amplitude
-        let overall = frequencyData.reduce(0, +) / Float(count)
+        frequencyData.withUnsafeBufferPointer { buffer in
+            // Low frequencies
+            for i in 0..<lowEnd {
+                lowSum += buffer[i]
+            }
+            // Mid frequencies
+            for i in midStart..<midEnd {
+                midSum += buffer[i]
+            }
+            // High frequencies
+            for i in highStart..<count {
+                highSum += buffer[i]
+            }
+            // Overall sum
+            for i in 0..<count {
+                overallSum += buffer[i]
+            }
+        }
         
-        // Apply smoothing and scaling
+        // Calculate averages
+        let lowFreq = lowSum / Float(lowEnd)
+        let midFreq = midSum / Float(midEnd - midStart)
+        let highFreq = highSum / Float(count - highStart)
+        let overall = overallSum / Float(count)
+        
+        // Apply smoothing and scaling with faster operations
         let smoothedLow = min(1.0, max(0.0, lowFreq * 2.0))
         let smoothedMid = min(1.0, max(0.0, midFreq * 2.0))
         let smoothedHigh = min(1.0, max(0.0, highFreq * 2.0))
         let smoothedOverall = min(1.0, max(0.0, overall * 1.5))
         
         return (low: smoothedLow, mid: smoothedMid, high: smoothedHigh, overall: smoothedOverall)
+    }
+    
+    private func processAudioForFractals(_ frequencyData: [Float]) -> (low: Float, mid: Float, high: Float, overall: Float) {
+        return processAudioForFractalsInline(frequencyData)
     }
 }
 
@@ -176,10 +216,17 @@ struct GenerativeFractalMetalView: UIViewRepresentable {
         let metalView = MTKView()
         metalView.device = MTLCreateSystemDefaultDevice()
         metalView.delegate = context.coordinator
-        metalView.preferredFramesPerSecond = 60
-        metalView.enableSetNeedsDisplay = false
+        
+        // Ultra-low latency settings
+        if #available(iOS 15.0, macOS 12.0, *) {
+            metalView.preferredFramesPerSecond = 120  // Use ProMotion if available
+        } else {
+            metalView.preferredFramesPerSecond = 60
+        }
+        
+        metalView.enableSetNeedsDisplay = false  // Manual control
         metalView.isPaused = false
-        metalView.framebufferOnly = false
+        metalView.framebufferOnly = true  // Optimize for performance
         metalView.clearColor = MTLClearColor(red: 0, green: 0, blue: 0, alpha: 1)
         
         return metalView

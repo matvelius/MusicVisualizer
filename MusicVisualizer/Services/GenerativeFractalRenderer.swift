@@ -258,8 +258,7 @@ class GenerativeFractalRenderer: ObservableObject {
     private let settingsManager = SettingsManager.shared
     
     // Performance tracking
-    private var lastUpdateTime: CFTimeInterval = 0
-    private let targetFrameRate: Double = 60.0
+    private var lastUpdateTime: CFTimeInterval = CACurrentMediaTime()
     private var lastRegenerationTime: Float = 0.0
     
     // Public access to particle count for debugging
@@ -567,13 +566,13 @@ class GenerativeFractalRenderer: ObservableObject {
     }
     
     func render(to drawable: CAMetalDrawable, in view: MTKView) {
-        // Throttle updates for performance
+        // Ultra-low latency: no frame throttling, immediate rendering
         let currentSystemTime = CACurrentMediaTime()
-        guard currentSystemTime - lastUpdateTime >= 1.0 / targetFrameRate else { return }
+        let deltaTime = Float(currentSystemTime - lastUpdateTime)
         lastUpdateTime = currentSystemTime
         
-        let deltaTime = Float(1.0 / targetFrameRate)
-        update(deltaTime: deltaTime)
+        // Update with actual delta time for smooth animation
+        update(deltaTime: min(deltaTime, 0.033)) // Cap at ~30fps delta for stability
         
         guard let commandBuffer = commandQueue.makeCommandBuffer(),
               let renderPassDescriptor = view.currentRenderPassDescriptor else { return }
@@ -622,8 +621,12 @@ class GenerativeFractalRenderer: ObservableObject {
         }
         
         encoder.endEncoding()
+        
+        // Present immediately for minimum latency
         commandBuffer.present(drawable)
         commandBuffer.commit()
+        
+        // Don't wait for completion - let GPU work asynchronously
     }
     
     func reset() {

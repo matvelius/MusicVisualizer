@@ -26,10 +26,9 @@ class AudioVisualizerService {
     private let settingsManager = SettingsManager.shared
     private var highPassFilter: ConfigurableFilter?
     
-    // Performance optimization: throttle updates to 60fps
-    private var lastUpdateTime: CFTimeInterval = 0
-    private let targetFrameInterval: CFTimeInterval = 1.0 / 60.0
+    // Ultra-low latency: immediate processing without throttling
     private let audioProcessingQueue = DispatchQueue(label: "audio.processing", qos: .userInteractive)
+    private var isProcessingAudio = false
     
     // Callback for frequency data updates
     var onFrequencyDataUpdate: (([Float]) -> Void)?
@@ -78,14 +77,21 @@ class AudioVisualizerService {
     }
     
     private func setupAudioTap() {
-        // Optimize buffer size for 60fps
-        let bufferSize = 1024
+        // Ultra-low latency: 64 samples = ~1.45ms at 44.1kHz
+        let bufferSize: AVAudioFrameCount = 64
         // Use nil format to automatically match hardware format and avoid sample rate mismatches
         
-        audioEngineService.installTap(onBus: 0, bufferSize: bufferSize, format: nil) { [weak self] buffer, time in
-            // Process on audio queue to avoid blocking
-            self?.handleAudioBuffer(buffer)
+        audioEngineService.installTap(onBus: 0, bufferSize: Int(bufferSize), format: nil) { [weak self] buffer, time in
+            // Immediate processing without additional queuing
+            self?.handleAudioBufferImmediate(buffer)
         }
+    }
+    
+    private func handleAudioBufferImmediate(_ buffer: AVAudioPCMBuffer) {
+        guard let channelData = buffer.floatChannelData?[0] else { return }
+        
+        // Immediate processing without array copying
+        processAudioBufferDirect(channelData, frameLength: Int(buffer.frameLength))
     }
     
     private func handleAudioBuffer(_ buffer: AVAudioPCMBuffer) {
@@ -95,14 +101,47 @@ class AudioVisualizerService {
         processAudioBuffer(bufferArray)
     }
     
-    func processAudioBuffer(_ buffer: [Float]) {
+    func processAudioBufferDirect(_ channelData: UnsafePointer<Float>, frameLength: Int) {
         // Skip processing if we're not running
         guard isRunning else { return }
         
-        // Throttle processing to maintain 60fps performance
-        let currentTime = CACurrentMediaTime()
-        guard currentTime - lastUpdateTime >= targetFrameInterval else { return }
-        lastUpdateTime = currentTime
+        // Prevent concurrent processing to avoid audio glitches
+        guard !isProcessingAudio else { return }
+        isProcessingAudio = true
+        
+        // Direct processing without copying or async dispatch
+        defer { isProcessingAudio = false }
+        
+        // Apply filters directly to pointer data
+        var filteredData: [Float]
+        if settingsManager.highPassFilterEnabled || settingsManager.noiseGateEnabled {
+            // Only copy when filters are needed
+            filteredData = Array(UnsafeBufferPointer(start: channelData, count: frameLength))
+            
+            if settingsManager.highPassFilterEnabled {
+                filteredData = applyHighPassFilter(to: filteredData)
+            }
+            if settingsManager.noiseGateEnabled {
+                filteredData = applyNoiseGate(to: filteredData)
+            }
+        } else {
+            // Use original data directly
+            filteredData = Array(UnsafeBufferPointer(start: channelData, count: frameLength))
+        }
+        
+        // Immediate FFT processing
+        let magnitudes = fftProcessor.processAudioBuffer(filteredData)
+        
+        // Extract frequency bins
+        let frequencyBins = binExtractor.extractBins(from: magnitudes, bandCount: bandCount)
+        
+        // Immediate callback on current thread (audio callback thread)
+        onFrequencyDataUpdate?(frequencyBins)
+    }
+    
+    func processAudioBuffer(_ buffer: [Float]) {
+        // Skip processing if we're not running
+        guard isRunning else { return }
         
         // Process on dedicated queue to avoid blocking audio thread
         audioProcessingQueue.async { [weak self] in
