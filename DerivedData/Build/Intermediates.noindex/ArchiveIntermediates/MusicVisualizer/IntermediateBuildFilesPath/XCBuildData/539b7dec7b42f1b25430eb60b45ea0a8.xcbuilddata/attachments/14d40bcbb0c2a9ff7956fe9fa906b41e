@@ -1,0 +1,110 @@
+{
+  "" : {
+    "const-values" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/MusicVisualizer-master.swiftconstvalues",
+    "dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/MusicVisualizer-master.d",
+    "diagnostics" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/MusicVisualizer-master.dia",
+    "emit-module-dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/MusicVisualizer-master-emit-module.d",
+    "emit-module-diagnostics" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/MusicVisualizer-master-emit-module.dia",
+    "swift-dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/MusicVisualizer-master.swiftdeps"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "index-unit-output-path" : "/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/GeneratedAssetSymbols.o"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Models/ColorTheme.swift" : {
+    "index-unit-output-path" : "/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/ColorTheme.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/ColorTheme.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/ColorTheme.o"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/MusicVisualizerApp.swift" : {
+    "index-unit-output-path" : "/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/MusicVisualizerApp.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/MusicVisualizerApp.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/MusicVisualizerApp.o"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Services/AudioEngineService.swift" : {
+    "index-unit-output-path" : "/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioEngineService.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioEngineService.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioEngineService.o"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Services/AudioPermissionService.swift" : {
+    "index-unit-output-path" : "/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioPermissionService.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioPermissionService.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioPermissionService.o"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Services/AudioVisualizerService.swift" : {
+    "index-unit-output-path" : "/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioVisualizerService.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioVisualizerService.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioVisualizerService.o"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Services/FFTProcessor.swift" : {
+    "index-unit-output-path" : "/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FFTProcessor.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FFTProcessor.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FFTProcessor.o"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Services/FractalRenderer.swift" : {
+    "index-unit-output-path" : "/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FractalRenderer.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FractalRenderer.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FractalRenderer.o"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Services/FrequencyBinExtractor.swift" : {
+    "index-unit-output-path" : "/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FrequencyBinExtractor.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FrequencyBinExtractor.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FrequencyBinExtractor.o"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Services/GenerativeFractalRenderer.swift" : {
+    "index-unit-output-path" : "/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/GenerativeFractalRenderer.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/GenerativeFractalRenderer.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/GenerativeFractalRenderer.o"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Services/SettingsManager.swift" : {
+    "index-unit-output-path" : "/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/SettingsManager.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/SettingsManager.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/SettingsManager.o"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Services/TreeVisualizationRenderer.swift" : {
+    "index-unit-output-path" : "/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/TreeVisualizationRenderer.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/TreeVisualizationRenderer.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/TreeVisualizationRenderer.o"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/ViewModels/EqualizerViewModel.swift" : {
+    "index-unit-output-path" : "/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/EqualizerViewModel.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/EqualizerViewModel.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/EqualizerViewModel.o"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/ViewModels/HomeViewModel.swift" : {
+    "index-unit-output-path" : "/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/HomeViewModel.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/HomeViewModel.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/HomeViewModel.o"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Views/CircularEqualizerView.swift" : {
+    "index-unit-output-path" : "/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/CircularEqualizerView.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/CircularEqualizerView.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/CircularEqualizerView.o"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Views/EqualizerView.swift" : {
+    "index-unit-output-path" : "/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/EqualizerView.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/EqualizerView.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/EqualizerView.o"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Views/FractalVisualizerView.swift" : {
+    "index-unit-output-path" : "/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FractalVisualizerView.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FractalVisualizerView.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FractalVisualizerView.o"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Views/HomeView.swift" : {
+    "index-unit-output-path" : "/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/HomeView.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/HomeView.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/HomeView.o"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Views/SettingsView.swift" : {
+    "index-unit-output-path" : "/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/SettingsView.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/SettingsView.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/SettingsView.o"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Views/TreeVisualizerView.swift" : {
+    "index-unit-output-path" : "/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/TreeVisualizerView.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/TreeVisualizerView.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/TreeVisualizerView.o"
+  }
+}

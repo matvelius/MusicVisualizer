@@ -1,0 +1,40 @@
+{
+  "source": "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Views/FractalVisualizerView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Fractal music visualizer",
+        "location": {
+          "startingColumn": 29,
+          "startingLine": 70
+        }
+      },
+      {
+        "comment": "",
+        "key": "Fractal Renderer Error",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 31
+        }
+      },
+      {
+        "comment": "",
+        "key": "Retry",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 41
+        }
+      },
+      {
+        "comment": "",
+        "key": "Initializing Generative Fractal Engine...",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 53
+        }
+      }
+    ]
+  },
+  "version": 1
+}

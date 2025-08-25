@@ -1,0 +1,264 @@
+{
+  "source": "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Views/SettingsView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Settings",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 264
+        }
+      },
+      {
+        "comment": "",
+        "key": "Visualization",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 18
+        }
+      },
+      {
+        "comment": "",
+        "key": "Color Theme",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 51
+        }
+      },
+      {
+        "comment": "",
+        "key": "Animation",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 66
+        }
+      },
+      {
+        "comment": "",
+        "key": "Audio Filters",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 84
+        }
+      },
+      {
+        "comment": "",
+        "key": "Mode",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 20
+        }
+      },
+      {
+        "comment": "",
+        "key": "Visualization Mode",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 23
+        }
+      },
+      {
+        "comment": "",
+        "key": "Frequency Bands",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 33
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 35
+        }
+      },
+      {
+        "comment": "",
+        "key": "Speed",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 69
+        }
+      },
+      {
+        "comment": "",
+        "key": "Reduces background noise when signal is below threshold",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 120
+        }
+      },
+      {
+        "comment": "",
+        "key": "Noise Gate",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 89
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 40,
+          "startingLine": 92
+        }
+      },
+      {
+        "comment": "",
+        "key": "Threshold",
+        "location": {
+          "startingColumn": 46,
+          "startingLine": 98
+        }
+      },
+      {
+        "comment": "",
+        "key": "Removes low-frequency noise below cutoff frequency",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 161
+        }
+      },
+      {
+        "comment": "",
+        "key": "High-Pass Filter",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 130
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 40,
+          "startingLine": 133
+        }
+      },
+      {
+        "comment": "",
+        "key": "Cutoff Frequency",
+        "location": {
+          "startingColumn": 46,
+          "startingLine": 139
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld Hz",
+        "location": {
+          "startingColumn": 46,
+          "startingLine": 143
+        }
+      },
+      {
+        "comment": "",
+        "key": "Fractal Settings",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 170
+        }
+      },
+      {
+        "comment": "",
+        "key": "Fractal Type",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 176
+        }
+      },
+      {
+        "comment": "",
+        "key": "Different mathematical fractals with unique visual characteristics",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 187
+        }
+      },
+      {
+        "comment": "",
+        "key": "Fractal Type",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 179
+        }
+      },
+      {
+        "comment": "",
+        "key": "Mandelbrot",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 180
+        }
+      },
+      {
+        "comment": "",
+        "key": "Julia Set",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 181
+        }
+      },
+      {
+        "comment": "",
+        "key": "Burning Ship",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 182
+        }
+      },
+      {
+        "comment": "",
+        "key": "Controls how fast the fractal zooms in response to audio",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 215
+        }
+      },
+      {
+        "comment": "",
+        "key": "Zoom Speed",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 197
+        }
+      },
+      {
+        "comment": "",
+        "key": "Adjusts the vibrancy of colors in response to audio frequencies",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 243
+        }
+      },
+      {
+        "comment": "",
+        "key": "Color Intensity",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 225
+        }
+      },
+      {
+        "comment": "",
+        "key": "Reset to Defaults",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 257
+        }
+      },
+      {
+        "comment": "",
+        "key": "Done",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 268
+        }
+      }
+    ]
+  },
+  "version": 1
+}

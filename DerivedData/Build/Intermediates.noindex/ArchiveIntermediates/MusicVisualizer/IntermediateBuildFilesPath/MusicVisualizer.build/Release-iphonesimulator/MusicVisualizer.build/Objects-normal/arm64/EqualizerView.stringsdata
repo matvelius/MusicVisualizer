@@ -1,0 +1,16 @@
+{
+  "source": "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Views/EqualizerView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Audio frequency equalizer",
+        "location": {
+          "startingColumn": 29,
+          "startingLine": 83
+        }
+      }
+    ]
+  },
+  "version": 1
+}

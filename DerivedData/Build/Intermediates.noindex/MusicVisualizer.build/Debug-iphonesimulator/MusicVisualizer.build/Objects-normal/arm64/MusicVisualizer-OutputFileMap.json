@@ -1,0 +1,208 @@
+{
+  "" : {
+    "diagnostics" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/MusicVisualizer-master.dia",
+    "emit-module-dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/MusicVisualizer-master-emit-module.d",
+    "emit-module-diagnostics" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/MusicVisualizer-master-emit-module.dia",
+    "swift-dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/MusicVisualizer-master.swiftdeps"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "const-values" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftconstvalues",
+    "dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/GeneratedAssetSymbols.d",
+    "diagnostics" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/GeneratedAssetSymbols.dia",
+    "index-unit-output-path" : "/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "swift-dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftdeps",
+    "swiftmodule" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/GeneratedAssetSymbols~partial.swiftmodule"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Models/ColorTheme.swift" : {
+    "const-values" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/ColorTheme.swiftconstvalues",
+    "dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/ColorTheme.d",
+    "diagnostics" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/ColorTheme.dia",
+    "index-unit-output-path" : "/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/ColorTheme.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/ColorTheme.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/ColorTheme.o",
+    "swift-dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/ColorTheme.swiftdeps",
+    "swiftmodule" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/ColorTheme~partial.swiftmodule"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/MusicVisualizerApp.swift" : {
+    "const-values" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/MusicVisualizerApp.swiftconstvalues",
+    "dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/MusicVisualizerApp.d",
+    "diagnostics" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/MusicVisualizerApp.dia",
+    "index-unit-output-path" : "/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/MusicVisualizerApp.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/MusicVisualizerApp.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/MusicVisualizerApp.o",
+    "swift-dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/MusicVisualizerApp.swiftdeps",
+    "swiftmodule" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/MusicVisualizerApp~partial.swiftmodule"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Services/AudioEngineService.swift" : {
+    "const-values" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioEngineService.swiftconstvalues",
+    "dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioEngineService.d",
+    "diagnostics" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioEngineService.dia",
+    "index-unit-output-path" : "/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioEngineService.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioEngineService.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioEngineService.o",
+    "swift-dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioEngineService.swiftdeps",
+    "swiftmodule" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioEngineService~partial.swiftmodule"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Services/AudioPermissionService.swift" : {
+    "const-values" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioPermissionService.swiftconstvalues",
+    "dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioPermissionService.d",
+    "diagnostics" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioPermissionService.dia",
+    "index-unit-output-path" : "/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioPermissionService.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioPermissionService.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioPermissionService.o",
+    "swift-dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioPermissionService.swiftdeps",
+    "swiftmodule" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioPermissionService~partial.swiftmodule"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Services/AudioVisualizerService.swift" : {
+    "const-values" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioVisualizerService.swiftconstvalues",
+    "dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioVisualizerService.d",
+    "diagnostics" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioVisualizerService.dia",
+    "index-unit-output-path" : "/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioVisualizerService.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioVisualizerService.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioVisualizerService.o",
+    "swift-dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioVisualizerService.swiftdeps",
+    "swiftmodule" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/AudioVisualizerService~partial.swiftmodule"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Services/FFTProcessor.swift" : {
+    "const-values" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FFTProcessor.swiftconstvalues",
+    "dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FFTProcessor.d",
+    "diagnostics" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FFTProcessor.dia",
+    "index-unit-output-path" : "/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FFTProcessor.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FFTProcessor.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FFTProcessor.o",
+    "swift-dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FFTProcessor.swiftdeps",
+    "swiftmodule" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FFTProcessor~partial.swiftmodule"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Services/FractalRenderer.swift" : {
+    "const-values" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FractalRenderer.swiftconstvalues",
+    "dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FractalRenderer.d",
+    "diagnostics" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FractalRenderer.dia",
+    "index-unit-output-path" : "/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FractalRenderer.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FractalRenderer.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FractalRenderer.o",
+    "swift-dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FractalRenderer.swiftdeps",
+    "swiftmodule" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FractalRenderer~partial.swiftmodule"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Services/FrequencyBinExtractor.swift" : {
+    "const-values" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FrequencyBinExtractor.swiftconstvalues",
+    "dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FrequencyBinExtractor.d",
+    "diagnostics" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FrequencyBinExtractor.dia",
+    "index-unit-output-path" : "/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FrequencyBinExtractor.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FrequencyBinExtractor.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FrequencyBinExtractor.o",
+    "swift-dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FrequencyBinExtractor.swiftdeps",
+    "swiftmodule" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FrequencyBinExtractor~partial.swiftmodule"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Services/GenerativeFractalRenderer.swift" : {
+    "const-values" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/GenerativeFractalRenderer.swiftconstvalues",
+    "dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/GenerativeFractalRenderer.d",
+    "diagnostics" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/GenerativeFractalRenderer.dia",
+    "index-unit-output-path" : "/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/GenerativeFractalRenderer.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/GenerativeFractalRenderer.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/GenerativeFractalRenderer.o",
+    "swift-dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/GenerativeFractalRenderer.swiftdeps",
+    "swiftmodule" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/GenerativeFractalRenderer~partial.swiftmodule"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Services/SettingsManager.swift" : {
+    "const-values" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/SettingsManager.swiftconstvalues",
+    "dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/SettingsManager.d",
+    "diagnostics" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/SettingsManager.dia",
+    "index-unit-output-path" : "/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/SettingsManager.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/SettingsManager.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/SettingsManager.o",
+    "swift-dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/SettingsManager.swiftdeps",
+    "swiftmodule" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/SettingsManager~partial.swiftmodule"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Services/TreeVisualizationRenderer.swift" : {
+    "const-values" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/TreeVisualizationRenderer.swiftconstvalues",
+    "dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/TreeVisualizationRenderer.d",
+    "diagnostics" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/TreeVisualizationRenderer.dia",
+    "index-unit-output-path" : "/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/TreeVisualizationRenderer.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/TreeVisualizationRenderer.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/TreeVisualizationRenderer.o",
+    "swift-dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/TreeVisualizationRenderer.swiftdeps",
+    "swiftmodule" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/TreeVisualizationRenderer~partial.swiftmodule"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/ViewModels/EqualizerViewModel.swift" : {
+    "const-values" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/EqualizerViewModel.swiftconstvalues",
+    "dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/EqualizerViewModel.d",
+    "diagnostics" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/EqualizerViewModel.dia",
+    "index-unit-output-path" : "/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/EqualizerViewModel.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/EqualizerViewModel.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/EqualizerViewModel.o",
+    "swift-dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/EqualizerViewModel.swiftdeps",
+    "swiftmodule" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/EqualizerViewModel~partial.swiftmodule"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/ViewModels/HomeViewModel.swift" : {
+    "const-values" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/HomeViewModel.swiftconstvalues",
+    "dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/HomeViewModel.d",
+    "diagnostics" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/HomeViewModel.dia",
+    "index-unit-output-path" : "/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/HomeViewModel.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/HomeViewModel.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/HomeViewModel.o",
+    "swift-dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/HomeViewModel.swiftdeps",
+    "swiftmodule" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/HomeViewModel~partial.swiftmodule"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Views/CircularEqualizerView.swift" : {
+    "const-values" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/CircularEqualizerView.swiftconstvalues",
+    "dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/CircularEqualizerView.d",
+    "diagnostics" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/CircularEqualizerView.dia",
+    "index-unit-output-path" : "/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/CircularEqualizerView.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/CircularEqualizerView.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/CircularEqualizerView.o",
+    "swift-dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/CircularEqualizerView.swiftdeps",
+    "swiftmodule" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/CircularEqualizerView~partial.swiftmodule"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Views/EqualizerView.swift" : {
+    "const-values" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/EqualizerView.swiftconstvalues",
+    "dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/EqualizerView.d",
+    "diagnostics" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/EqualizerView.dia",
+    "index-unit-output-path" : "/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/EqualizerView.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/EqualizerView.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/EqualizerView.o",
+    "swift-dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/EqualizerView.swiftdeps",
+    "swiftmodule" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/EqualizerView~partial.swiftmodule"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Views/FractalVisualizerView.swift" : {
+    "const-values" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FractalVisualizerView.swiftconstvalues",
+    "dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FractalVisualizerView.d",
+    "diagnostics" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FractalVisualizerView.dia",
+    "index-unit-output-path" : "/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FractalVisualizerView.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FractalVisualizerView.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FractalVisualizerView.o",
+    "swift-dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FractalVisualizerView.swiftdeps",
+    "swiftmodule" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/FractalVisualizerView~partial.swiftmodule"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Views/HomeView.swift" : {
+    "const-values" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/HomeView.swiftconstvalues",
+    "dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/HomeView.d",
+    "diagnostics" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/HomeView.dia",
+    "index-unit-output-path" : "/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/HomeView.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/HomeView.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/HomeView.o",
+    "swift-dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/HomeView.swiftdeps",
+    "swiftmodule" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/HomeView~partial.swiftmodule"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Views/SettingsView.swift" : {
+    "const-values" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/SettingsView.swiftconstvalues",
+    "dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/SettingsView.d",
+    "diagnostics" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/SettingsView.dia",
+    "index-unit-output-path" : "/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/SettingsView.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/SettingsView.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/SettingsView.o",
+    "swift-dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/SettingsView.swiftdeps",
+    "swiftmodule" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/SettingsView~partial.swiftmodule"
+  },
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Views/TreeVisualizerView.swift" : {
+    "const-values" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/TreeVisualizerView.swiftconstvalues",
+    "dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/TreeVisualizerView.d",
+    "diagnostics" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/TreeVisualizerView.dia",
+    "index-unit-output-path" : "/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/TreeVisualizerView.o",
+    "llvm-bc" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/TreeVisualizerView.bc",
+    "object" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/TreeVisualizerView.o",
+    "swift-dependencies" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/TreeVisualizerView.swiftdeps",
+    "swiftmodule" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/MusicVisualizer.build/Debug-iphonesimulator/MusicVisualizer.build/Objects-normal/arm64/TreeVisualizerView~partial.swiftmodule"
+  }
+}

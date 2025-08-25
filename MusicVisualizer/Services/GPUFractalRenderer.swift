@@ -60,14 +60,21 @@ class GPUFractalRenderer: ObservableObject {
     private var computePipelineState: MTLComputePipelineState!
     private var layeredComputePipelineState: MTLComputePipelineState!
     
-    // Buffers
-    private var paramsBuffer: MTLBuffer
-    private var audioBuffer: MTLBuffer
+    // Triple buffering system for zero-copy operations
+    private var paramBuffers: [MTLBuffer] = []
+    private var audioBuffers: [MTLBuffer] = []
+    private var currentBufferIndex: Int = 0
+    private let maxBuffersInFlight: Int = 3
+    private var inflightSemaphore: DispatchSemaphore
     
-    // Render targets
-    private var fractalTexture: MTLTexture?
+    // Render targets with triple buffering
+    private var fractalTextures: [MTLTexture?] = []
     private var renderPipelineState: MTLRenderPipelineState!
     private var quadVertexBuffer: MTLBuffer
+    
+    // Memory pool for efficient buffer reuse
+    private var bufferPool: [MTLBuffer] = []
+    private var texturePool: [MTLTexture] = []
     
     // Parameters
     private var fractalParams: GPUFractalParams
@@ -93,6 +100,9 @@ class GPUFractalRenderer: ObservableObject {
             throw GPUFractalError.failedToCreateCommandQueue
         }
         
+        // Initialize semaphore for triple buffering
+        self.inflightSemaphore = DispatchSemaphore(value: 3)
+        
         self.device = device
         self.commandQueue = commandQueue
         self.startTime = CACurrentMediaTime()
@@ -100,21 +110,6 @@ class GPUFractalRenderer: ObservableObject {
         // Initialize parameters
         self.fractalParams = GPUFractalParams()
         self.audioData = GPUAudioData()
-        
-        // Create buffers
-        guard let paramsBuffer = device.makeBuffer(
-            length: MemoryLayout<GPUFractalParams>.stride,
-            options: .storageModeShared
-        ),
-        let audioBuffer = device.makeBuffer(
-            length: MemoryLayout<GPUAudioData>.stride,
-            options: .storageModeShared
-        ) else {
-            throw GPUFractalError.failedToCreateBuffer
-        }
-        
-        self.paramsBuffer = paramsBuffer
-        self.audioBuffer = audioBuffer
         
         // Create quad vertices for full-screen rendering
         let quadVertices: [Float] = [
@@ -134,12 +129,55 @@ class GPUFractalRenderer: ObservableObject {
         
         self.quadVertexBuffer = vertexBuffer
         
+        // Create triple buffering system
+        try self.setupTripleBuffering()
+        
+        // Initialize texture arrays
+        self.fractalTextures = Array(repeating: nil, count: maxBuffersInFlight)
+        
         // Setup Metal pipelines
         try setupComputePipeline()
         try setupRenderPipeline()
         
         // Apply initial settings
         updateFractalType()
+    }
+    
+    // MARK: - Triple Buffering Setup
+    
+    private func setupTripleBuffering() throws {
+        // Create triple buffers for parameters
+        for _ in 0..<maxBuffersInFlight {
+            guard let paramsBuffer = device.makeBuffer(
+                length: MemoryLayout<GPUFractalParams>.stride,
+                options: .storageModeShared
+            ) else {
+                throw GPUFractalError.failedToCreateBuffer
+            }
+            paramBuffers.append(paramsBuffer)
+        }
+        
+        // Create triple buffers for audio data
+        for _ in 0..<maxBuffersInFlight {
+            guard let audioBuffer = device.makeBuffer(
+                length: MemoryLayout<GPUAudioData>.stride,
+                options: .storageModeShared
+            ) else {
+                throw GPUFractalError.failedToCreateBuffer
+            }
+            audioBuffers.append(audioBuffer)
+        }
+        
+        // Pre-allocate buffer pool for dynamic allocations
+        for _ in 0..<10 {
+            guard let buffer = device.makeBuffer(
+                length: 4096, // 4KB buffers for temporary data
+                options: .storageModeShared
+            ) else {
+                throw GPUFractalError.failedToCreateBuffer
+            }
+            bufferPool.append(buffer)
+        }
     }
     
     private func setupComputePipeline() throws {
@@ -283,18 +321,39 @@ class GPUFractalRenderer: ObservableObject {
     }
     
     private func createFractalTexture(size: CGSize) -> MTLTexture? {
+        // Try to reuse texture from pool first
+        for (index, poolTexture) in texturePool.enumerated() {
+            if poolTexture.width == Int(size.width) && poolTexture.height == Int(size.height) {
+                let texture = poolTexture
+                texturePool.remove(at: index)
+                return texture
+            }
+        }
+        
+        // Create new texture if no suitable one in pool
         let descriptor = MTLTextureDescriptor()
         descriptor.textureType = .type2D
         descriptor.pixelFormat = .rgba8Unorm
         descriptor.width = Int(size.width)
         descriptor.height = Int(size.height)
         descriptor.usage = [.shaderWrite, .shaderRead]
+        descriptor.storageMode = .private // GPU-only memory for better performance
         
         return device.makeTexture(descriptor: descriptor)
     }
     
+    private func returnTextureToPool(_ texture: MTLTexture) {
+        // Return texture to pool for reuse (limit pool size)
+        if texturePool.count < 6 {
+            texturePool.append(texture)
+        }
+    }
+    
     func render(to drawable: CAMetalDrawable, in view: MTKView) {
         guard isAnimating else { return }
+        
+        // Wait for available buffer (prevents over-queuing)
+        _ = inflightSemaphore.wait(timeout: .distantFuture)
         
         // Update timing
         let currentTime = CACurrentMediaTime()
@@ -305,18 +364,40 @@ class GPUFractalRenderer: ObservableObject {
         let drawableSize = drawable.layer.drawableSize
         fractalParams.resolution = SIMD2<UInt32>(UInt32(drawableSize.width), UInt32(drawableSize.height))
         
-        // Create or recreate texture if needed
-        if fractalTexture?.width != Int(drawableSize.width) || fractalTexture?.height != Int(drawableSize.height) {
-            fractalTexture = createFractalTexture(size: drawableSize)
+        // Get current buffer index for triple buffering
+        let bufferIndex = currentBufferIndex
+        currentBufferIndex = (currentBufferIndex + 1) % maxBuffersInFlight
+        
+        // Create or recreate texture if needed for this buffer
+        if fractalTextures[bufferIndex]?.width != Int(drawableSize.width) || 
+           fractalTextures[bufferIndex]?.height != Int(drawableSize.height) {
+            
+            // Return old texture to pool
+            if let oldTexture = fractalTextures[bufferIndex] {
+                returnTextureToPool(oldTexture)
+            }
+            
+            fractalTextures[bufferIndex] = createFractalTexture(size: drawableSize)
         }
         
-        guard let fractalTexture = fractalTexture else { return }
+        guard let fractalTexture = fractalTextures[bufferIndex] else { 
+            inflightSemaphore.signal()
+            return 
+        }
         
-        // Create command buffer
-        guard let commandBuffer = commandQueue.makeCommandBuffer() else { return }
+        // Create command buffer with completion handler
+        guard let commandBuffer = commandQueue.makeCommandBuffer() else { 
+            inflightSemaphore.signal()
+            return 
+        }
         
-        // Update buffers
-        updateBuffers()
+        // Add completion handler to signal semaphore when GPU work is done
+        commandBuffer.addCompletedHandler { [weak self] _ in
+            self?.inflightSemaphore.signal()
+        }
+        
+        // Update buffers for current frame (zero-copy)
+        updateTripleBuffers(bufferIndex: bufferIndex)
         
         // Compute pass - Generate fractal on GPU
         if let computeEncoder = commandBuffer.makeComputeCommandEncoder() {
@@ -324,13 +405,21 @@ class GPUFractalRenderer: ObservableObject {
             computeEncoder.setComputePipelineState(pipelineState!)
             
             computeEncoder.setTexture(fractalTexture, index: 0)
-            computeEncoder.setBuffer(paramsBuffer, offset: 0, index: 0)
-            computeEncoder.setBuffer(audioBuffer, offset: 0, index: 1)
+            computeEncoder.setBuffer(paramBuffers[bufferIndex], offset: 0, index: 0)
+            computeEncoder.setBuffer(audioBuffers[bufferIndex], offset: 0, index: 1)
             
-            // Calculate optimal thread group size
+            // Calculate optimal thread group size with improved algorithm
+            let maxThreadsPerThreadgroup = min(
+                computePipelineState.maxTotalThreadsPerThreadgroup,
+                device.maxThreadsPerThreadgroup.width * device.maxThreadsPerThreadgroup.height
+            )
+            
+            let threadgroupWidth = min(32, fractalTexture.width)
+            let threadgroupHeight = min(maxThreadsPerThreadgroup / threadgroupWidth, fractalTexture.height)
+            
             let threadgroupSize = MTLSize(
-                width: min(16, fractalTexture.width),
-                height: min(16, fractalTexture.height),
+                width: threadgroupWidth,
+                height: threadgroupHeight,
                 depth: 1
             )
             
@@ -345,7 +434,10 @@ class GPUFractalRenderer: ObservableObject {
         }
         
         // Render pass - Display fractal texture
-        guard let renderPassDescriptor = view.currentRenderPassDescriptor else { return }
+        guard let renderPassDescriptor = view.currentRenderPassDescriptor else { 
+            return 
+        }
+        
         renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(red: 0, green: 0, blue: 0, alpha: 1)
         renderPassDescriptor.colorAttachments[0].loadAction = .clear
         
@@ -358,18 +450,18 @@ class GPUFractalRenderer: ObservableObject {
             renderEncoder.endEncoding()
         }
         
-        // Present immediately for minimum latency
+        // Present with minimal latency
         commandBuffer.present(drawable)
         commandBuffer.commit()
     }
     
-    private func updateBuffers() {
-        // Update parameters buffer
-        let paramsPointer = paramsBuffer.contents().bindMemory(to: GPUFractalParams.self, capacity: 1)
+    private func updateTripleBuffers(bufferIndex: Int) {
+        // Update parameters buffer for current frame (zero-copy)
+        let paramsPointer = paramBuffers[bufferIndex].contents().bindMemory(to: GPUFractalParams.self, capacity: 1)
         paramsPointer.pointee = fractalParams
         
-        // Update audio buffer
-        let audioPointer = audioBuffer.contents().bindMemory(to: GPUAudioData.self, capacity: 1)
+        // Update audio buffer for current frame (zero-copy)
+        let audioPointer = audioBuffers[bufferIndex].contents().bindMemory(to: GPUAudioData.self, capacity: 1)
         audioPointer.pointee = audioData
     }
     

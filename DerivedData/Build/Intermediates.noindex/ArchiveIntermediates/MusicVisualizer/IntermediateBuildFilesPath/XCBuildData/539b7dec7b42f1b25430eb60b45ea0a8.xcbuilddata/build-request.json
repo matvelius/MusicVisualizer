@@ -1,0 +1,79 @@
+{
+  "buildCommand" : {
+    "command" : "build",
+    "skipDependencies" : false,
+    "style" : "buildOnly"
+  },
+  "configuredTargets" : [
+    {
+      "guid" : "5cb8c5451c57b4bf782326694e2b9c7b52c0c68503aff5c448cff0e2cc82de3f"
+    }
+  ],
+  "containerPath" : "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer.xcodeproj",
+  "continueBuildingAfterErrors" : false,
+  "dependencyScope" : "workspace",
+  "enableIndexBuildArena" : false,
+  "hideShellScriptEnvironment" : false,
+  "parameters" : {
+    "action" : "install",
+    "activeArchitecture" : "arm64",
+    "activeRunDestination" : {
+      "disableOnlyActiveArch" : false,
+      "platform" : "iphonesimulator",
+      "sdk" : "iphonesimulator18.2",
+      "sdkVariant" : "iphonesimulator",
+      "supportedArchitectures" : [
+        "arm64",
+        "x86_64"
+      ],
+      "targetArchitecture" : "arm64"
+    },
+    "arenaInfo" : {
+      "buildIntermediatesPath" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex",
+      "buildProductsPath" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Products",
+      "derivedDataPath" : "/Users/matvey/Dev/MusicVisualizer/DerivedData",
+      "indexDataStoreFolderPath" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Index.noindex/DataStore",
+      "indexEnableDataStore" : true,
+      "indexPCHPath" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Index.noindex/PrecompiledHeaders",
+      "pchPath" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/PrecompiledHeaders"
+    },
+    "configurationName" : "Release",
+    "overrides" : {
+      "commandLine" : {
+        "table" : {
+          "DSTROOT" : "/tmp/build"
+        }
+      },
+      "synthesized" : {
+        "table" : {
+          "ACTION" : "install",
+          "ASSET_PACK_FOLDER_PATH" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/InstallationBuildProductsLocation/OnDemandResources",
+          "ASSETCATALOG_COMPILER_FLATTENED_APP_ICON_PATH" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/BuildProductsPath/ProductIcon.png",
+          "DEPLOYMENT_LOCATION" : "YES",
+          "DEPLOYMENT_POSTPROCESSING" : "YES",
+          "DSTROOT" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/InstallationBuildProductsLocation",
+          "EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE" : "NO",
+          "ENABLE_PREVIEWS" : "NO",
+          "ENABLE_SIGNATURE_AGGREGATION" : "YES",
+          "ENABLE_XOJIT_PREVIEWS" : "YES",
+          "INDEX_ENABLE_DATA_STORE" : "NO",
+          "MESSAGES_APPLICATION_EXTENSION_SUPPORT_FOLDER_PATH" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/BuildProductsPath/MessagesApplicationExtensionSupport",
+          "MESSAGES_APPLICATION_SUPPORT_FOLDER_PATH" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/BuildProductsPath/MessagesApplicationSupport",
+          "OBJROOT" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath",
+          "ONLY_ACTIVE_ARCH" : "YES",
+          "SHARED_PRECOMPS_DIR" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/PrecompiledHeaders",
+          "SIGNATURE_METADATA_FOLDER_PATH" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/BuildProductsPath/Signatures",
+          "SWIFT_STDLIB_TOOL_UNSIGNED_DESTINATION_DIR" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/BuildProductsPath/SwiftSupport",
+          "SYMROOT" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/BuildProductsPath",
+          "WATCHKIT_2_SUPPORT_FOLDER_PATH" : "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/BuildProductsPath/WatchKitSupport2"
+        }
+      }
+    }
+  },
+  "schemeCommand" : "archive",
+  "showNonLoggedProgress" : true,
+  "useDryRun" : false,
+  "useImplicitDependencies" : true,
+  "useLegacyBuildLocations" : false,
+  "useParallelTargets" : true
+}

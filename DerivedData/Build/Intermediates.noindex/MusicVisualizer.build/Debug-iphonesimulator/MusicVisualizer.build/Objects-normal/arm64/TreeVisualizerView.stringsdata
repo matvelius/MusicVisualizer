@@ -1,0 +1,40 @@
+{
+  "source": "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Views/TreeVisualizerView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Tree music visualizer",
+        "location": {
+          "startingColumn": 29,
+          "startingLine": 89
+        }
+      },
+      {
+        "comment": "",
+        "key": "Tree Renderer Error",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 31
+        }
+      },
+      {
+        "comment": "",
+        "key": "Retry",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 41
+        }
+      },
+      {
+        "comment": "",
+        "key": "Growing the Tree of Life...",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 53
+        }
+      }
+    ]
+  },
+  "version": 1
+}

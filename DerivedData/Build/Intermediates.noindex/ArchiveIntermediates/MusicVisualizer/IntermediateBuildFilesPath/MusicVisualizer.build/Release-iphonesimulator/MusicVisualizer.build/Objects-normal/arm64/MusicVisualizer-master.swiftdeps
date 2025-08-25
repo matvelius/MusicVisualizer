@@ -1,0 +1,26 @@
+version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
+options: "1369c1858637a397de4703a35502c9f073a3d9bdd74b2f4dbebe4823df9c14ec"
+build_start_time: [1753764172, 813330000]
+build_end_time: [1753764181, 418110000]
+inputs:
+  ? "/Users/matvey/Dev/MusicVisualizer/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/MusicVisualizer/IntermediateBuildFilesPath/MusicVisualizer.build/Release-iphonesimulator/MusicVisualizer.build/DerivedSources/GeneratedAssetSymbols.swift"
+  : [1753764172, 606312931]
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Models/ColorTheme.swift": [1752973977, 683759325]
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/MusicVisualizerApp.swift": [1752951992, 873723417]
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Services/AudioEngineService.swift": [1753541292, 414762678]
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Services/AudioPermissionService.swift": [1753730677, 424680248]
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Services/AudioVisualizerService.swift": [1753541341, 644977770]
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Services/FFTProcessor.swift": [1753033100, 996023852]
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Services/FractalRenderer.swift": [1753334043, 19337562]
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Services/FrequencyBinExtractor.swift": [1752961410, 542214557]
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Services/GenerativeFractalRenderer.swift": [1753541970, 204673717]
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Services/SettingsManager.swift": [1753763559, 225379402]
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Services/TreeVisualizationRenderer.swift": [1753764144, 309023362]
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/ViewModels/EqualizerViewModel.swift": [1753033100, 997098176]
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/ViewModels/HomeViewModel.swift": [1752952025, 716804936]
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Views/CircularEqualizerView.swift": [1753033544, 88789123]
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Views/EqualizerView.swift": [1753033505, 585284955]
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Views/FractalVisualizerView.swift": [1753644768, 662691360]
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Views/HomeView.swift": [1753763566, 616084268]
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Views/SettingsView.swift": [1753644746, 258472864]
+  "/Users/matvey/Dev/MusicVisualizer/MusicVisualizer/Views/TreeVisualizerView.swift": [1753763552, 874424277]

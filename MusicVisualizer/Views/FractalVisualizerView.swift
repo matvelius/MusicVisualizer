@@ -363,7 +363,7 @@ struct GPUFractalMetalView: UIViewRepresentable {
         metalView.device = MTLCreateSystemDefaultDevice()
         metalView.delegate = context.coordinator
         
-        // Ultra-low latency settings
+        // Ultra-low latency settings with enhanced memory optimization
         if #available(iOS 15.0, macOS 12.0, *) {
             metalView.preferredFramesPerSecond = 120  // Use ProMotion if available
         } else {
@@ -374,6 +374,19 @@ struct GPUFractalMetalView: UIViewRepresentable {
         metalView.isPaused = false
         metalView.framebufferOnly = true  // Optimize for performance
         metalView.clearColor = MTLClearColor(red: 0, green: 0, blue: 0, alpha: 1)
+        
+        // Phase 3 Memory Optimizations
+        metalView.presentsWithTransaction = false  // Reduce CPU overhead
+        metalView.colorPixelFormat = .bgra8Unorm   // Optimal format for display
+        
+        // Memory pressure optimizations
+        metalView.autoResizeDrawable = true
+        metalView.drawableSize = metalView.frame.size
+        
+        // Configure layer for triple buffering if available
+        if let metalLayer = metalView.layer as? CAMetalLayer {
+            metalLayer.maximumDrawableCount = 3  // Triple buffering
+        }
         
         return metalView
     }
